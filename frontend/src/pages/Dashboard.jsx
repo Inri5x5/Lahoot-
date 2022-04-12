@@ -1,15 +1,16 @@
 import { Box } from '@mui/system';
 import React from 'react';
-import DasboardNavBar from '../components/DashboardTopNavBar';
-import DashLeftNavBar from '../components/DashLeftNavBar';
-// import { APICall } from '../apiCall.js';
+import DashboardNav from '../components/DashboardNav';
 
 function Dashboard () {
-  return (
-    <Box>
-      <DasboardNavBar></DasboardNavBar>
-      <DashLeftNavBar></DashLeftNavBar>
+  return (<>
+    <Box sx={{ display: 'flex' }}>
+      <DashboardNav></DashboardNav>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 10 }}>
+        <div>game game</div>
+      </Box>
     </Box>
+  </>
   );
 }
 

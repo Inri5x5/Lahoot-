@@ -7,7 +7,6 @@ import {
   Button,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-// import Apihelp from '../config.json';
 import { APICall } from '../apiCall.js';
 
 function DashboardTopNavBar () {
