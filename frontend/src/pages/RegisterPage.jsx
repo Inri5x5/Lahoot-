@@ -22,7 +22,7 @@ function Register () {
         throw new Error(data.error);
       }
       localStorage.setItem('token', data.token);
-      navigate('/quiz/new');
+      navigate('/dashboard');
     } catch (err) {
       console.log(err);
     }

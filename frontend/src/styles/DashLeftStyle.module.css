@@ -1,9 +1,15 @@
 .navContainer {
-  display: flex;
   flex-direction: column;
   height: 100%;
-  max-width: 20% ;
+  max-width: 100% ;
+  position: absolute;
   background-color: lightblue;
-  margin: 0;
   border: 2px solid black;
+  flex: 1;
+}
+
+.fill {
+  position: fixed;
+  height: 100%;
+  margin: 0;
 }
