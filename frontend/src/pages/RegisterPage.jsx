@@ -2,28 +2,35 @@ import RegisterForm from '../components/RegisterForm';
 import AuthNavBar from '../components/AuthNavBar'
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
+import { APICall } from '../apiCall';
 
 function Register () {
   const navigate = useNavigate();
 
-  return <>
-    <AuthNavBar></AuthNavBar>
-    <RegisterForm submit={async (email, password, name) => {
-      const response = await fetch('http://localhost:5005/admin/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          name,
-        })
-      });
-      const data = await response.json();
+  const register = async (email, password, name) => {
+    try {
+      const requestBody = {
+        email: email,
+        password: password,
+        name: name,
+      };
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      const data = await APICall(requestBody, '/admin/auth/register', 'POST', headers);
+      if (data.error) {
+        throw new Error(data.error);
+      }
       localStorage.setItem('token', data.token);
       navigate('/quiz/new');
-    }} />
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  return <>
+    <AuthNavBar></AuthNavBar>
+    <RegisterForm submit={register} />
   </>;
 }
 
