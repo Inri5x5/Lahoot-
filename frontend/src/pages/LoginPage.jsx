@@ -40,7 +40,7 @@ function Login () {
         throw new Error(data.error);
       }
       localStorage.setItem('token', data.token);
-      navigate('/quiz/new');
+      navigate('/dashboard');
     } catch (err) {
       setErrorMessage('Something is wrong');
       setError(true);
