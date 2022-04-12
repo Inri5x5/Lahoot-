@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Context, initialValue } from './context';
 
 import Register from './pages/RegisterPage';
 import Login from './pages/LoginPage';
@@ -8,6 +9,16 @@ import QuizNew from './pages/QuizNewPage';
 import Dashboard from './pages/Dashboard';
 
 function App () {
+  const [isError, setIsError] = React.useState(initialValue.isError);
+  const [errorMessage, setErrorMessage] = React.useState(initialValue.errorMessage);
+  const getters = {
+    isError,
+    errorMessage,
+  };
+  const setters = {
+    setIsError,
+    setErrorMessage,
+  }
   return (
     <>
       <BrowserRouter>

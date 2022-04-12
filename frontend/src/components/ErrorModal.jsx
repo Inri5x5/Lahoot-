@@ -17,9 +17,9 @@ const style = {
 };
 
 export default function ErrorModal (props) {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const handleClose = () => setOpen(false);
-
+  setOpen(props.isOpen);
   return (
     <div>
       <Modal
@@ -42,5 +42,6 @@ export default function ErrorModal (props) {
 }
 
 ErrorModal.propTypes = {
-  error: PropTypes.object
+  error: PropTypes.object,
+  isOpen: PropTypes.bool
 }
