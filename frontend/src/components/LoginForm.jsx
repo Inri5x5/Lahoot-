@@ -16,7 +16,7 @@ function LoginForm ({ submit }) {
       <h3>Welcome Back Master</h3>
       <label>Email:</label>
       <input
-        type="text"
+        type="email"
         required
         value={email}
         onChange={(e) => setEmail(e.target.value)}
