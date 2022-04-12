@@ -1,0 +1,9 @@
+.navContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 20% ;
+  background-color: lightblue;
+  margin: 0;
+  border: 2px solid black;
+}
