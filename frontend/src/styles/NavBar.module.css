@@ -1,0 +1,25 @@
+.home_container {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.home_navbar {
+  background-color: red
+}
+
+.home_body {
+  background-color: blue
+}
+
+.home_footer {
+  background-color: green
+}
+
+@media screen and (min-width: 992px) {
+  .home_navbar {
+    background-color: pink;
+  }
+}
