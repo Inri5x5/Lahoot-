@@ -24,8 +24,7 @@ import {
   TextField,
   DialogActions,
 } from '@mui/material';
-
-import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { APICall } from '../apiCall.js';
 
 const drawerWidth = 240;
@@ -94,12 +93,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function DashboardNav () {
+export default function DashboardNav (props) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [quizName, setName] = React.useState('');
-  const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -113,23 +111,6 @@ export default function DashboardNav () {
   const handleDialogClose = () => {
     setOpenDialog(false);
   };
-
-  const userLogout = async () => {
-    try {
-      const headers = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
-      }
-      const data = await APICall(null, '/admin/auth/logout', 'POST', headers);
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      localStorage.removeItem('token');
-      navigate('/');
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   const addQuiz = async (name) => {
     if (!quizName.trim()) {
@@ -149,6 +130,7 @@ export default function DashboardNav () {
         throw new Error(data.error);
       }
       handleDialogClose();
+      props.modifyQuizzes();
     } catch (err) {
       console.log(err)
     }
@@ -173,7 +155,7 @@ export default function DashboardNav () {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             BigBrain
           </Typography>
-          <Button color="inherit" onClick={userLogout}>Logout</Button>
+          <Button color="inherit" onClick={props.logout}>Logout</Button>
         </Toolbar>
       </AppBar>
 
@@ -233,4 +215,9 @@ export default function DashboardNav () {
       </Dialog>
   </>
   );
+}
+
+DashboardNav.propTypes = {
+  logout: PropTypes.func,
+  modifyQuizzes: PropTypes.func,
 }
