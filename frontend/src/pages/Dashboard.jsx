@@ -6,6 +6,8 @@ import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
 import { APICall } from '../apiCall.js';
 import Loading from '../components/Loading';
+import Typography from '@mui/material/Typography';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 function Dashboard () {
   const navigate = useNavigate();
@@ -23,14 +25,11 @@ function Dashboard () {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
       }
-      const data = await APICall(null, '/admin/auth/logout', 'POST', headers);
-      if (data.error) {
-        throw new Error(data.error);
-      }
+      await APICall(null, '/admin/auth/logout', 'POST', headers);
       localStorage.removeItem('token');
       navigate('/');
     } catch (error) {
-      console.log(error)
+      alert(error)
     }
   }
 
@@ -45,13 +44,10 @@ function Dashboard () {
         Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
       };
       const data = await APICall(null, '/admin/quiz', 'GET', headers);
-      if (data.error) {
-        throw new Error(data.error);
-      }
       const newQuizzes = [...data.quizzes]
       setQuizzes(newQuizzes);
     } catch (err) {
-      console.log(err);
+      alert(err);
     } finally {
       setLoading(false);
     }
@@ -64,6 +60,19 @@ function Dashboard () {
 
   // Render the questions
   const constructQuiz = () => {
+    if (quizzes.length === 0) {
+      return (<>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', }}>
+        <Typography variant="h5" gutterBottom component="div" sx={{ color: 'text.disabled', my: 1 }}>
+          Add new quiz by clicking
+        </Typography>
+        <AddCircleOutlineIcon sx={{ color: 'text.disabled', mx: 1 }}/>
+        <Typography variant="h5" gutterBottom component="div" sx={{ color: 'text.disabled', my: 1 }}>
+          on the left
+        </Typography>
+      </Box>
+      </>)
+    }
     const cards = quizzes.map((quiz, i) => {
       return (<QuizCard quiz={quiz} key={i} modifyQuizzes={getQuestions}/>);
     });

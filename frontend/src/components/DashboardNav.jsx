@@ -125,14 +125,11 @@ export default function DashboardNav (props) {
       const requestBody = {
         name: name,
       }
-      const data = await APICall(requestBody, '/admin/quiz/new', 'POST', headers)
-      if (data.error) {
-        throw new Error(data.error);
-      }
+      await APICall(requestBody, '/admin/quiz/new', 'POST', headers)
       handleDialogClose();
       props.modifyQuizzes();
     } catch (err) {
-      console.log(err)
+      alert(err);
     }
   }
 
