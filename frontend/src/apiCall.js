@@ -13,11 +13,16 @@ const APICall = (requestBody, path, methodType, headersData) => {
     }
     fetch(`${backendServer}${path}`, init)
       .then(response => {
-        return response.json()
-      })
-      .then(body => {
-        resolve(body);
-      })
+        if (response.status === 200) {
+          return response.json().then(resolve);
+        } else if (response.status === 400) {
+          return response.json().then(obj => {
+            reject(obj.error);
+          });
+        } else {
+          throw new Error(`${response.status} Error with API call`);
+        }
+      });
   })
 }
 export { APICall };
