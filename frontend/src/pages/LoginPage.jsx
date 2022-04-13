@@ -2,7 +2,7 @@ import LoginForm from '../components/LoginForm';
 import AuthNavBar from '../components/AuthNavBar'
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
-import { APICall } from '../apiCall';
+import { APICall } from '../helper-func';
 import Loading from '../components/Loading'
 
 function Login () {

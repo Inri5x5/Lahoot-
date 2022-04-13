@@ -25,7 +25,7 @@ import {
   DialogActions,
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import { APICall } from '../apiCall.js';
+import { APICall } from '../helper-func.js';
 
 const drawerWidth = 240;
 

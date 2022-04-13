@@ -4,7 +4,7 @@ import DashboardNav from '../components/DashboardNav';
 import QuizCard from '../components/QuizCard';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
-import { APICall } from '../apiCall.js';
+import { APICall } from '../helper-func.js';
 import Loading from '../components/Loading';
 import Typography from '@mui/material/Typography';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';

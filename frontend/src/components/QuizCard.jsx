@@ -8,7 +8,7 @@ import { experimentalStyled as styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { APICall } from '../apiCall.js';
+import { APICall } from '../helper-func.js';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';

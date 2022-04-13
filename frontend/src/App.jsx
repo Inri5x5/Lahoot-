@@ -5,8 +5,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './pages/RegisterPage';
 import Login from './pages/LoginPage';
 import Home from './pages/HomePage';
-import QuizNew from './pages/QuizNewPage';
 import Dashboard from './pages/Dashboard';
+import EditQuiz from './pages/EditQuizCard';
 
 function App () {
   // const [isError, setIsError] = React.useState(initialValue.isError);
@@ -27,8 +27,8 @@ function App () {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/quiz/new" element={<QuizNew />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/edit/quiz/:qId" element={<EditQuiz />} />
         </Routes>
       </BrowserRouter>
     </>
