@@ -7,9 +7,11 @@ import { CardActionArea, CardActions, Button } from '@mui/material';
 import { experimentalStyled as styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { APICall } from '../apiCall.js';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -20,6 +22,8 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function QuizCard (props) {
+  const navigate = useNavigate();
+
   const deleteQuiz = async (id) => {
     try {
       const headers = {
@@ -59,6 +63,9 @@ export default function QuizCard (props) {
           <CardActions>
             <Button>
               <DeleteIcon onClick={() => deleteQuiz(props.quiz.id)}/>
+            </Button>
+            <Button>
+              <EditIcon onClick={() => navigate(`/edit/quiz/${props.quiz.id}`)} />
             </Button>
           </CardActions>
         </Card>
