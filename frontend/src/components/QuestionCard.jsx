@@ -16,6 +16,22 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 }));
 
 export default function QuestionCard (props) {
+  // console.log(props.questions)
+  const deleteQuestion = () => {
+    const q = props.quiz.questions;
+
+    const newQuestions = q.filter(function (value, index, arr) {
+      return (value.id !== props.questions.id)
+    });
+
+    const body = {
+      questions: newQuestions,
+      name: props.quiz.name,
+      thumbnail: props.quiz.thumbnail
+    }
+    props.quizUpdate(body);
+  }
+
   return (
     <Grid sx={{ width: '100%' }} key={props.key}>
       <StyledPaper sx={{ my: 1, mx: 'auto', p: 2 }}>
@@ -23,7 +39,7 @@ export default function QuestionCard (props) {
           <CardActionArea>
             <CardContent>
               <Typography>
-                {props.question}
+                {props.questions.question}
               </Typography>
             </CardContent>
           </CardActionArea>
@@ -31,7 +47,7 @@ export default function QuestionCard (props) {
             <Button>
               <ModeEditOutlineIcon />
             </Button>
-            <Button>
+            <Button onClick={deleteQuestion}>
               <DeleteIcon />
             </Button>
           </CardActions>
@@ -42,6 +58,8 @@ export default function QuestionCard (props) {
 }
 
 QuestionCard.propTypes = {
-  question: PropTypes.string,
+  questions: PropTypes.object,
+  quiz: PropTypes.object,
   key: PropTypes.number,
+  quizUpdate: PropTypes.func,
 }

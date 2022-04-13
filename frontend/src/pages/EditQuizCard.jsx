@@ -7,6 +7,7 @@ import QuestionCard from '../components/QuestionCard';
 import { APICall, fileToDataUrl } from '../helper-func.js';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
+import { v4 as uuid } from 'uuid';
 
 export default function EditQuizCard () {
   const params = useParams();
@@ -78,6 +79,7 @@ export default function EditQuizCard () {
       if (data.error) {
         throw new Error(data.error);
       }
+      getQuiz();
     } catch (err) {
       console.log(err);
     }
@@ -96,8 +98,9 @@ export default function EditQuizCard () {
       thumbnail: quizInfo.thumbnail,
     }
 
+    const uId = uuid();
     const newQuestion = {
-      questionId: quizInfo.questions.length,
+      id: uId.slice(0, 8),
       question: 'What is my name 2?',
     }
 
@@ -106,12 +109,17 @@ export default function EditQuizCard () {
   }
 
   const addingCard = () => {
-    const qArray = [];
-    for (let i = 0; i < quizInfo.questions.length; i++) {
-      qArray.push(quizInfo.questions[i].question)
-    }
-    const cards = qArray.map((question, i) => {
-      return (<QuestionCard question={question} key={i}/>)
+    // const qArray = [];
+    // for (let i = 0; i < quizInfo.questions.length; i++) {
+    //   qArray.push(quizInfo.questions[i].question)
+    // }
+    const cards = quizInfo.questions.map((question, i) => {
+      return (<QuestionCard
+        questions={question}
+        key={i}
+        quizUpdate={updateQuiz}
+        quiz={quizInfo}
+        />)
     })
     return cards
   }
