@@ -11,7 +11,6 @@ import { useNavigate } from 'react-router-dom';
 
 export default function AuthNavBar () {
   const navigate = useNavigate();
-  console.log('Hey there');
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar style={{ background: '#2E3B55' }} position="static">

@@ -19,20 +19,6 @@ function Dashboard () {
     }
   });
 
-  const userLogout = async () => {
-    try {
-      const headers = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
-      }
-      await APICall(null, '/admin/auth/logout', 'POST', headers);
-      localStorage.removeItem('token');
-      navigate('/');
-    } catch (error) {
-      alert(error)
-    }
-  }
-
   const [loading, setLoading] = React.useState(false);
   const [quizzes, setQuizzes] = React.useState([]);
 
@@ -44,21 +30,22 @@ function Dashboard () {
         Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
       };
       const data = await APICall(null, '/admin/quiz', 'GET', headers);
+      setLoading(false);
       const newQuizzes = [...data.quizzes]
       setQuizzes(newQuizzes);
     } catch (err) {
       alert(err);
-    } finally {
+      console.log(err);
       setLoading(false);
     }
   }
 
-  // Get the initial questions from database
+  // Get the initial quizzes from database
   React.useEffect(() => {
     getQuestions();
   }, []);
 
-  // Render the questions
+  // Render the quizzes
   const constructQuiz = () => {
     if (quizzes.length === 0) {
       return (<>
@@ -87,7 +74,7 @@ function Dashboard () {
 
   return (<>
     <Box sx={{ display: 'flex' }}>
-      <DashboardNav logout={userLogout} modifyQuizzes={getQuestions}></DashboardNav>
+      <DashboardNav modifyQuizzes={getQuestions}></DashboardNav>
       <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 10 }}>
         {loading && <Loading></Loading>}
         {!loading && constructQuiz()}

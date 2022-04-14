@@ -26,6 +26,7 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { APICall } from '../helper-func.js';
+import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -94,6 +95,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 export default function DashboardNav (props) {
+  const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -111,6 +113,20 @@ export default function DashboardNav (props) {
   const handleDialogClose = () => {
     setOpenDialog(false);
   };
+
+  const userLogout = async () => {
+    try {
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
+      }
+      await APICall(null, '/admin/auth/logout', 'POST', headers);
+      localStorage.removeItem('token');
+      navigate('/');
+    } catch (error) {
+      alert(error)
+    }
+  }
 
   const addQuiz = async (name) => {
     if (!quizName.trim()) {
@@ -149,10 +165,10 @@ export default function DashboardNav (props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, cursor: 'pointer' }} onClick={ () => { navigate('/dashboard') }}>
             BigBrain
           </Typography>
-          <Button color="inherit" onClick={props.logout}>Logout</Button>
+          <Button color="inherit" onClick={userLogout}>Logout</Button>
         </Toolbar>
       </AppBar>
 
@@ -215,6 +231,5 @@ export default function DashboardNav (props) {
 }
 
 DashboardNav.propTypes = {
-  logout: PropTypes.func,
   modifyQuizzes: PropTypes.func,
 }

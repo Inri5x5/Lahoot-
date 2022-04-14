@@ -10,7 +10,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const StyledPaper = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
-  padding: theme.spacing(2),
   maxWidth: '100%',
   color: theme.palette.text.primary,
 }));
@@ -33,7 +32,7 @@ export default function QuestionCard (props) {
 
   return (
     <Grid sx={{ width: '100%' }} key={props.index}>
-      <StyledPaper sx={{ my: 1, mx: 'auto', p: 2 }}>
+      <StyledPaper sx={{ my: 1, mx: 'auto' }}>
         <Card>
           <CardActionArea>
             <CardContent>

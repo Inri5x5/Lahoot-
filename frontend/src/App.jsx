@@ -9,17 +9,6 @@ import Dashboard from './pages/Dashboard';
 import EditQuiz from './pages/EditQuizPage';
 
 function App () {
-  // const [isError, setIsError] = React.useState(initialValue.isError);
-  // const [errorMessage, setErrorMessage] = React.useState(initialValue.errorMessage);
-  // const getters = {
-  //   isError,
-  //   errorMessage,
-  // };
-  // const setters = {
-  //   setIsError,
-  //   setErrorMessage,
-  // }
-
   return (
     <>
       <BrowserRouter>
