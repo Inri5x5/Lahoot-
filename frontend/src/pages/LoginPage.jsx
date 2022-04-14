@@ -10,6 +10,7 @@ function Login () {
   const [loading, setLoading] = React.useState(false);
 
   const login = async (email, password) => {
+    let data = null;
     try {
       setLoading(true);
       const requestBody = {
@@ -19,12 +20,12 @@ function Login () {
       const headers = {
         'Content-Type': 'application/json',
       };
-      const data = await APICall(requestBody, '/admin/auth/login', 'POST', headers);
+      data = await APICall(requestBody, '/admin/auth/login', 'POST', headers);
       localStorage.setItem('token', data.token);
+      setLoading(false);
       navigate('/dashboard');
     } catch (err) {
       alert(err);
-    } finally {
       setLoading(false);
     }
   }

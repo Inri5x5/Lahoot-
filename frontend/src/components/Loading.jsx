@@ -11,7 +11,16 @@ const LoadingWrapper = styled('div')({
 
 const Loading = () => {
   const [error, setError] = React.useState(false);
-  setTimeout(() => setError(true), 10000);
+
+  React.useEffect(() => {
+    const timeId = setTimeout(() => {
+      setError(true);
+    }, 10000);
+    return () => {
+      clearTimeout(timeId);
+    }
+  }, []);
+
   return (
     <LoadingWrapper>
       {!error && (

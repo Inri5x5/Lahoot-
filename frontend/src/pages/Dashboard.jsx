@@ -44,21 +44,22 @@ function Dashboard () {
         Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
       };
       const data = await APICall(null, '/admin/quiz', 'GET', headers);
+      setLoading(false);
       const newQuizzes = [...data.quizzes]
       setQuizzes(newQuizzes);
     } catch (err) {
       alert(err);
-    } finally {
+      console.log(err);
       setLoading(false);
     }
   }
 
-  // Get the initial questions from database
+  // Get the initial quizzes from database
   React.useEffect(() => {
     getQuestions();
   }, []);
 
-  // Render the questions
+  // Render the quizzes
   const constructQuiz = () => {
     if (quizzes.length === 0) {
       return (<>
