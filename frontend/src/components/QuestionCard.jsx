@@ -16,7 +16,6 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 }));
 
 export default function QuestionCard (props) {
-  // console.log(props.questions)
   const deleteQuestion = () => {
     const q = props.quiz.questions;
 
@@ -33,7 +32,7 @@ export default function QuestionCard (props) {
   }
 
   return (
-    <Grid sx={{ width: '100%' }} key={props.key}>
+    <Grid sx={{ width: '100%' }} key={props.index}>
       <StyledPaper sx={{ my: 1, mx: 'auto', p: 2 }}>
         <Card>
           <CardActionArea>
@@ -60,6 +59,6 @@ export default function QuestionCard (props) {
 QuestionCard.propTypes = {
   questions: PropTypes.object,
   quiz: PropTypes.object,
-  key: PropTypes.number,
+  index: PropTypes.number,
   quizUpdate: PropTypes.func,
 }

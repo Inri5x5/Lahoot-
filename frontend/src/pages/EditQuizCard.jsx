@@ -1,4 +1,4 @@
-import { Grid, Button, Card, CardMedia, Dialog, DialogTitle, DialogContent, TextField, DialogActions, IconButton } from '@mui/material';
+import { Grid, Button, Card, CardMedia, Dialog, DialogTitle, DialogContent, TextField, DialogActions, IconButton, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -108,11 +108,20 @@ export default function EditQuizCard () {
     updateQuiz(updateQuizInfo);
   }
 
-  const addingCard = () => {
-    // const qArray = [];
-    // for (let i = 0; i < quizInfo.questions.length; i++) {
-    //   qArray.push(quizInfo.questions[i].question)
-    // }
+  const constructQuestion = () => {
+    if (quizInfo.questions.length === 0) {
+      return (<>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', }}>
+        <Typography variant="h5" gutterBottom component="div" sx={{ color: 'text.disabled', my: 1 }}>
+          Add new question by clicking
+        </Typography>
+        <AddBoxOutlinedIcon sx={{ color: 'text.disabled', mx: 1 }}/>
+        <Typography variant="h5" gutterBottom component="div" sx={{ color: 'text.disabled', my: 1 }}>
+          below
+        </Typography>
+      </Box>
+      </>)
+    }
     const cards = quizInfo.questions.map((question, i) => {
       return (<QuestionCard
         questions={question}
@@ -121,11 +130,6 @@ export default function EditQuizCard () {
         quiz={quizInfo}
         />)
     })
-    return cards
-  }
-
-  const constructQuestion = () => {
-    const cards = addingCard();
     return (
       <Box sx={{ flexGrow: 1 }}>
         <Grid>
@@ -162,11 +166,11 @@ export default function EditQuizCard () {
             aria-label="add question"
             onClick={addQuestion}
             >
-            <AddBoxOutlinedIcon size="large"/>
+            <AddBoxOutlinedIcon sx={{ mx: 1, fontSize: '125%' }}/>
           </IconButton>
         </Box>
       </Box>
-      <Dialog PaperProps={{ sx: { width: '45%', height: '30%' } }}
+      <Dialog PaperProps={{ sx: { width: '45%', height: '35%' } }}
         open={openDialog} onClose={handleDialogClose}>
         <DialogTitle>Give Your Quiz a Name!</DialogTitle>
         <DialogContent>
@@ -197,7 +201,7 @@ export default function EditQuizCard () {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={quizInfoUpdate} >Add</Button>
+          <Button onClick={quizInfoUpdate}>Save</Button>
         </DialogActions>
       </Dialog>
     </Box>

@@ -7,7 +7,6 @@ import { CardActionArea, CardActions, Button } from '@mui/material';
 import { experimentalStyled as styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import { APICall } from '../helper-func.js';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
@@ -43,7 +42,7 @@ export default function QuizCard (props) {
     <Grid item xs={2} sm={4} md={4} key={props.key}>
       <Item>
         <Card>
-          <CardActionArea>
+          <CardActionArea onClick={() => navigate(`/edit/quiz/${props.quiz.id}`)} >
             <CardMedia
               component="img"
               height="140"
@@ -62,9 +61,6 @@ export default function QuizCard (props) {
           <CardActions>
             <Button>
               <DeleteIcon onClick={() => deleteQuiz(props.quiz.id)}/>
-            </Button>
-            <Button>
-              <EditIcon onClick={() => navigate(`/edit/quiz/${props.quiz.id}`)} />
             </Button>
           </CardActions>
         </Card>
