@@ -114,6 +114,20 @@ export default function DashboardNav (props) {
     setOpenDialog(false);
   };
 
+  const userLogout = async () => {
+    try {
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
+      }
+      await APICall(null, '/admin/auth/logout', 'POST', headers);
+      localStorage.removeItem('token');
+      navigate('/');
+    } catch (error) {
+      alert(error)
+    }
+  }
+
   const addQuiz = async (name) => {
     if (!quizName.trim()) {
       alert('Be Creative and Enter a name!')
@@ -154,7 +168,7 @@ export default function DashboardNav (props) {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, cursor: 'pointer' }} onClick={ () => { navigate('/dashboard') }}>
             BigBrain
           </Typography>
-          <Button color="inherit" onClick={props.logout}>Logout</Button>
+          <Button color="inherit" onClick={userLogout}>Logout</Button>
         </Toolbar>
       </AppBar>
 
@@ -217,6 +231,5 @@ export default function DashboardNav (props) {
 }
 
 DashboardNav.propTypes = {
-  logout: PropTypes.func,
   modifyQuizzes: PropTypes.func,
 }

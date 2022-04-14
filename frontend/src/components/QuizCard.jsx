@@ -54,7 +54,7 @@ export default function QuizCard (props) {
                 {props.quiz.name}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Number of Qs and Total Time
+                Click to edit
               </Typography>
             </CardContent>
           </CardActionArea>

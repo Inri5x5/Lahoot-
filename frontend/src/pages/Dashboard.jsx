@@ -19,20 +19,6 @@ function Dashboard () {
     }
   });
 
-  const userLogout = async () => {
-    try {
-      const headers = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
-      }
-      await APICall(null, '/admin/auth/logout', 'POST', headers);
-      localStorage.removeItem('token');
-      navigate('/');
-    } catch (error) {
-      alert(error)
-    }
-  }
-
   const [loading, setLoading] = React.useState(false);
   const [quizzes, setQuizzes] = React.useState([]);
 
@@ -88,7 +74,7 @@ function Dashboard () {
 
   return (<>
     <Box sx={{ display: 'flex' }}>
-      <DashboardNav logout={userLogout} modifyQuizzes={getQuestions}></DashboardNav>
+      <DashboardNav modifyQuizzes={getQuestions}></DashboardNav>
       <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 10 }}>
         {loading && <Loading></Loading>}
         {!loading && constructQuiz()}
