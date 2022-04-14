@@ -59,8 +59,8 @@ export default function QuizCard (props) {
             </CardContent>
           </CardActionArea>
           <CardActions>
-            <Button>
-              <DeleteIcon onClick={() => deleteQuiz(props.quiz.id)}/>
+            <Button onClick={() => deleteQuiz(props.quiz.id)}>
+              <DeleteIcon />
             </Button>
           </CardActions>
         </Card>

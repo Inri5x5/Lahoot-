@@ -2,7 +2,7 @@ import { Grid, Button, Card, CardMedia, Dialog, DialogTitle, DialogContent, Text
 import { Box } from '@mui/system';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import DashboardTopNavBar from '../components/DashboardTopNavBar';
+import DashboardNavBar from '../components/DashboardNav';
 import QuestionCard from '../components/QuestionCard';
 import { APICall, fileToDataUrl } from '../helper-func.js';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
@@ -23,7 +23,7 @@ export default function EditQuizCard () {
     if (!token) {
       navigate('/')
     }
-  });
+  }, []);
 
   const handleDialogOpen = () => {
     setOpenDialog(true);
@@ -140,36 +140,41 @@ export default function EditQuizCard () {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-      <DashboardTopNavBar></DashboardTopNavBar>
-      <Card>
-        <CardMedia
-          component="img"
-          image={quizInfo.thumbnail}
-          alt={quizInfo.name + ' thumbnail'}
-          height="150"
-          maxwidth="150"
-        />
-      </Card>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <h1>{quizInfo.name}</h1>
-        <Button onClick={handleDialogOpen}>
-          <ModeEditOutlineIcon />Edit Quiz
-        </Button>
-      </Box>
-      <Box component ="main">
-        {constructQuestion()}
-        <Box sx={{ display: 'flex', justifyContent: 'center', height: '15%' }}>
-          <IconButton
-            component="span"
-            color="primary"
-            aria-label="add question"
-            onClick={addQuestion}
-            >
-            <AddBoxOutlinedIcon sx={{ mx: 1, fontSize: '125%' }}/>
-          </IconButton>
+    <Box sx={{ display: 'flex' }}>
+      <DashboardNavBar></DashboardNavBar>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 10 }}>
+        <Card>
+          <CardMedia
+            component="img"
+            image={quizInfo.thumbnail}
+            alt={quizInfo.name + ' thumbnail'}
+            height="150"
+            maxwidth="150"
+          />
+        </Card>
+
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <h1>{quizInfo.name}</h1>
+          <Button onClick={handleDialogOpen}>
+            <ModeEditOutlineIcon />Edit Quiz
+          </Button>
+        </Box>
+
+        <Box >
+          {constructQuestion()}
+          <Box sx={{ display: 'flex', justifyContent: 'center', height: '15%' }}>
+            <IconButton
+              component="span"
+              color="primary"
+              aria-label="add question"
+              onClick={addQuestion}
+              >
+              <AddBoxOutlinedIcon sx={{ mx: 1, fontSize: '125%' }}/>
+            </IconButton>
+          </Box>
         </Box>
       </Box>
+
       <Dialog PaperProps={{ sx: { width: '45%', height: '35%' } }}
         open={openDialog} onClose={handleDialogClose}>
         <DialogTitle>Give Your Quiz a Name!</DialogTitle>
