@@ -1,23 +1,22 @@
-import { Grid, Button, Card, CardMedia, Dialog, DialogTitle, DialogContent, TextField, DialogActions, IconButton, Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import { Box, Grid, Button, Card, CardMedia, IconButton, Typography, } from '@mui/material';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import DashboardTopNavBar from '../components/DashboardTopNavBar';
 import QuestionCard from '../components/QuestionCard';
-import { APICall, fileToDataUrl } from '../helper-func.js';
+import { APICall } from '../helper-func.js';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
-import { v4 as uuid } from 'uuid';
+import AddQuestionDialog from '../components/AddQuestionDialog';
+import EditQuizDialog from '../components/EditQuizDialog';
 
 export default function EditQuizCard () {
   const params = useParams();
-  const qId = params.qId;
+  const questId = params.questId;
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const [quizInfo, setQuizinfo] = React.useState({ questions: [] });
-  const [openDialog, setOpenDialog] = React.useState(false);
-  const [updateName, setNewName] = React.useState('');
-  const [quizThumbnail, setQuizThumbnail] = React.useState('');
+  const [openEdit, setEditDialog] = React.useState(false);
+  const [openAdd, setAddDialog] = React.useState(false);
 
   React.useEffect(() => {
     if (!token) {
@@ -25,32 +24,27 @@ export default function EditQuizCard () {
     }
   });
 
-  const handleDialogOpen = () => {
-    setOpenDialog(true);
+  const editDialogOpen = () => {
+    setEditDialog(true);
   };
 
-  const handleDialogClose = () => {
-    setOpenDialog(false);
-    setNewName('');
-    setQuizThumbnail('')
+  const addDialogOpen = () => {
+    setAddDialog(true);
   };
 
-  const updateQuizThumbnail = (e) => {
-    const file = e.target.files[0];
-    fileToDataUrl(file)
-      .then((res) => {
-        setQuizThumbnail(res);
-      })
-  }
+  const dialogClose = () => {
+    setAddDialog(false);
+    setEditDialog(false);
+  };
 
-  const quizInfoUpdate = () => {
+  const quizInfoUpdate = (updateName, quizThumbnail) => {
     const body = {
       question: quizInfo.questions,
-      name: updateName,
+      name: (!updateName.trim()) ? quizInfo.name : updateName,
       thumbnail: quizThumbnail
     }
     updateQuiz(body);
-    handleDialogClose();
+    dialogClose();
   }
 
   const getQuiz = async () => {
@@ -59,7 +53,7 @@ export default function EditQuizCard () {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
       };
-      const data = await APICall(null, `/admin/quiz/${qId}`, 'GET', headers);
+      const data = await APICall(null, `/admin/quiz/${questId}`, 'GET', headers);
       if (data.error) {
         throw new Error(data.error);
       }
@@ -75,7 +69,7 @@ export default function EditQuizCard () {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
       };
-      const data = await APICall(q, `/admin/quiz/${qId}`, 'PUT', headers);
+      const data = await APICall(q, `/admin/quiz/${questId}`, 'PUT', headers);
       if (data.error) {
         throw new Error(data.error);
       }
@@ -90,22 +84,16 @@ export default function EditQuizCard () {
     getQuiz();
   }, []);
 
-  // Temporary Adding Question && Soon have a own Modal and page
-  const addQuestion = () => {
+  const addQuestion = (newQuestion) => {
     const updateQuizInfo = {
       questions: quizInfo.questions,
       name: quizInfo.name,
       thumbnail: quizInfo.thumbnail,
     }
 
-    const uId = uuid();
-    const newQuestion = {
-      id: uId.slice(0, 8),
-      question: 'What is my name 2?',
-    }
-
     updateQuizInfo.questions.push(newQuestion);
     updateQuiz(updateQuizInfo);
+    dialogClose();
   }
 
   const constructQuestion = () => {
@@ -122,6 +110,7 @@ export default function EditQuizCard () {
       </Box>
       </>)
     }
+
     const cards = quizInfo.questions.map((question, i) => {
       return (<QuestionCard
         questions={question}
@@ -153,7 +142,7 @@ export default function EditQuizCard () {
       </Card>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <h1>{quizInfo.name}</h1>
-        <Button onClick={handleDialogOpen}>
+        <Button onClick={editDialogOpen}>
           <ModeEditOutlineIcon />Edit Quiz
         </Button>
       </Box>
@@ -164,46 +153,22 @@ export default function EditQuizCard () {
             component="span"
             color="primary"
             aria-label="add question"
-            onClick={addQuestion}
+            onClick={addDialogOpen}
             >
             <AddBoxOutlinedIcon sx={{ mx: 1, fontSize: '125%' }}/>
           </IconButton>
         </Box>
       </Box>
-      <Dialog PaperProps={{ sx: { width: '45%', height: '35%' } }}
-        open={openDialog} onClose={handleDialogClose}>
-        <DialogTitle>Give Your Quiz a Name!</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Name"
-            type="text"
-            fullWidth
-            variant="standard"
-            onChange={(e) => setNewName(e.target.value) }
-          />
-          <div>
-            <Button
-              variant= "contained"
-              component= "label"
-            >
-              Upload Thumbnail
-              <input
-                type= "file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={updateQuizThumbnail}
-              />
-            </Button>
-          </div>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={quizInfoUpdate}>Save</Button>
-        </DialogActions>
-      </Dialog>
+      <EditQuizDialog
+        openEdit={openEdit}
+        onClose={dialogClose}
+        quizInfoUpdate={quizInfoUpdate}
+        />
+      <AddQuestionDialog
+        open={openAdd}
+        onClose={dialogClose}
+        addingQuestion={addQuestion}
+        />
     </Box>
   );
 }

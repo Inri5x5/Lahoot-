@@ -6,7 +6,7 @@ import Register from './pages/RegisterPage';
 import Login from './pages/LoginPage';
 import Home from './pages/HomePage';
 import Dashboard from './pages/Dashboard';
-import EditQuiz from './pages/EditQuizCard';
+import EditQuiz from './pages/EditQuizPage';
 
 function App () {
   // const [isError, setIsError] = React.useState(initialValue.isError);
@@ -28,7 +28,7 @@ function App () {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/edit/quiz/:qId" element={<EditQuiz />} />
+          <Route path="/edit/quiz/:questId" element={<EditQuiz />} />
         </Routes>
       </BrowserRouter>
     </>
