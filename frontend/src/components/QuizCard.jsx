@@ -39,7 +39,7 @@ export default function QuizCard (props) {
   }
 
   return (
-    <Grid item xs={2} sm={4} md={4} key={props.key}>
+    <Grid item xs={2} sm={4} md={4} key={props.index}>
       <Item>
         <Card>
           <CardActionArea onClick={() => navigate(`/edit/quiz/${props.quiz.id}`)} >
@@ -71,6 +71,6 @@ export default function QuizCard (props) {
 
 QuizCard.propTypes = {
   quiz: PropTypes.object,
-  key: PropTypes.number,
+  index: PropTypes.number,
   modifyQuizzes: PropTypes.func,
 }
