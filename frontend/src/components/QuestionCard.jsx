@@ -61,7 +61,7 @@ export default function QuestionCard (props) {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button>
+            <Button onClick={props.updateQuestion}>
               <ModeEditOutlineIcon />
             </Button>
             <Button onClick={deleteQuestion}>
@@ -79,4 +79,5 @@ QuestionCard.propTypes = {
   quiz: PropTypes.object,
   index: PropTypes.number,
   quizUpdate: PropTypes.func,
+  updateQuestion: PropTypes.func,
 }

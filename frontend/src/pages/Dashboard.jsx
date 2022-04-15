@@ -22,7 +22,7 @@ function Dashboard () {
   const [loading, setLoading] = React.useState(false);
   const [quizzes, setQuizzes] = React.useState([]);
 
-  const getQuestions = async () => {
+  const getQuizzzes = async () => {
     setLoading(true);
     try {
       const headers = {
@@ -51,7 +51,7 @@ function Dashboard () {
 
   // Get the initial quizzes from database
   React.useEffect(() => {
-    getQuestions();
+    getQuizzzes();
   }, []);
 
   // Render the quizzes
@@ -73,7 +73,7 @@ function Dashboard () {
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
           {quizzes.map((quiz, i) => {
-            return (<QuizCard quiz={quiz} key={i} modifyQuizzes={getQuestions}/>);
+            return (<QuizCard quiz={quiz} key={i} modifyQuizzes={getQuizzzes}/>);
           })}
         </Grid>
       </Box>
@@ -82,7 +82,7 @@ function Dashboard () {
 
   return (<>
     <Box sx={{ display: 'flex' }}>
-      <DashboardNav modifyQuizzes={getQuestions}></DashboardNav>
+      <DashboardNav modifyQuizzes={getQuizzzes}></DashboardNav>
       <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 10 }}>
         {loading && <Loading></Loading>}
         {!loading && constructQuiz()}

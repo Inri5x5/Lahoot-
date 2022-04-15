@@ -26,7 +26,7 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { APICall } from '../helper-func.js';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -95,6 +95,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 export default function DashboardNav (props) {
+  const location = useLocation();
   const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -143,7 +144,11 @@ export default function DashboardNav (props) {
       }
       await APICall(requestBody, '/admin/quiz/new', 'POST', headers)
       handleDialogClose();
-      props.modifyQuizzes();
+      if (location.pathname === '/dashboard') {
+        props.modifyQuizzes();
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       alert(err);
     }
