@@ -30,12 +30,21 @@ function Dashboard () {
         Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
       };
       const data = await APICall(null, '/admin/quiz', 'GET', headers);
-      setLoading(false);
       const newQuizzes = [...data.quizzes]
+      for (let i = 0; i < newQuizzes.length; i++) {
+        const quizId = newQuizzes[i].id;
+        const quizData = await APICall(null, `/admin/quiz/${quizId}`, 'GET', headers);
+        let totalTime = 0;
+        for (let i = 0; i < quizData.questions.length; i++) {
+          totalTime += quizData.questions[i].timeLimit;
+        }
+        newQuizzes[i].totalQuestions = quizData.questions.length;
+        newQuizzes[i].totalTime = totalTime
+      }
       setQuizzes(newQuizzes);
+      setLoading(false);
     } catch (err) {
       alert(err);
-      console.log(err);
       setLoading(false);
     }
   }

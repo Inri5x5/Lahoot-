@@ -36,15 +36,13 @@ export default function addQuestionDialog (props) {
   const [questionVideo, setQuestionVideo] = React.useState('');
   const [answers, setAnswers] = React.useState([]);
   const { image, video } = selectMediaType;
-  const [answerIndex, setAnswersIndex] = React.useState(2);
 
   React.useEffect(() => {
     if (props.open === false) {
-      setAnswersIndex(2);
       const initialAnswers = []
       for (let i = 0; i < 2; i++) {
         initialAnswers.push({
-          id: i,
+          id: -1,
           answer: '',
           correct: false,
         });
@@ -213,7 +211,7 @@ export default function addQuestionDialog (props) {
 
             labelId="questTypeForm"
             id="demo-controlled-open-select"
-            open={openQType}loc
+            open={openQType}
             onClose={handleClose}
             onOpen={handleOpen}
             value={questionType}
@@ -278,6 +276,7 @@ export default function addQuestionDialog (props) {
             <FormGroup>
               {
                 answers.map((answer, index) => {
+                  answer.id = index;
                   let possibleDelete = false;
                   if (index >= 2) {
                     possibleDelete = true;
@@ -299,11 +298,10 @@ export default function addQuestionDialog (props) {
             (<Button onClick={() => {
               const newAnswers = [...answers];
               newAnswers.push({
-                id: answerIndex,
+                id: -1,
                 answer: '',
                 correct: false,
               });
-              setAnswersIndex(answerIndex + 1);
               setAnswers(newAnswers);
             }}>
               Add

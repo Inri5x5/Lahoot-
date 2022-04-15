@@ -8,15 +8,17 @@ import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import AddQuestionDialog from '../components/AddQuestionDialog';
 import EditQuizDialog from '../components/EditQuizDialog';
+import Loading from '../components/Loading';
 
 export default function EditQuizCard () {
   const params = useParams();
-  const questId = params.questId;
+  const quizId = params.quizId;
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const [quizInfo, setQuizinfo] = React.useState({ questions: [] });
   const [openEdit, setEditDialog] = React.useState(false);
   const [openAdd, setAddDialog] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     if (!token) {
@@ -49,17 +51,20 @@ export default function EditQuizCard () {
 
   const getQuiz = async () => {
     try {
+      setLoading(true);
       const headers = {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
       };
-      const data = await APICall(null, `/admin/quiz/${questId}`, 'GET', headers);
+      const data = await APICall(null, `/admin/quiz/${quizId}`, 'GET', headers);
       if (data.error) {
         throw new Error(data.error);
       }
       setQuizinfo(data);
+      setLoading(false);
     } catch (err) {
-      console.log(err);
+      alert(err);
+      setLoading(false);
     }
   }
 
@@ -69,7 +74,7 @@ export default function EditQuizCard () {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
       };
-      const data = await APICall(q, `/admin/quiz/${questId}`, 'PUT', headers);
+      const data = await APICall(q, `/admin/quiz/${quizId}`, 'PUT', headers);
       if (data.error) {
         throw new Error(data.error);
       }
@@ -113,7 +118,7 @@ export default function EditQuizCard () {
 
     const cards = quizInfo.questions.map((question, i) => {
       return (<QuestionCard
-        questions={question}
+        question={question}
         key={i}
         quizUpdate={updateQuiz}
         quiz={quizInfo}
@@ -131,48 +136,51 @@ export default function EditQuizCard () {
   return (
     <Box sx={{ display: 'flex' }}>
       <DashboardNavBar></DashboardNavBar>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 10 }}>
-        <Card>
-          <CardMedia
-            component="img"
-            image={quizInfo.thumbnail}
-            alt={quizInfo.name + ' thumbnail'}
-            height="150"
-            maxwidth="150"
-          />
-        </Card>
+      {loading && <Loading></Loading>}
+      {!loading &&
+        <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 10 }}>
+          <Card>
+            <CardMedia
+              component="img"
+              image={quizInfo.thumbnail}
+              alt={quizInfo.name + ' thumbnail'}
+              height="150"
+              maxwidth="150"
+            />
+          </Card>
 
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <h1>{quizInfo.name}</h1>
-          <Button onClick={editDialogOpen}>
-            <ModeEditOutlineIcon />Edit Quiz
-          </Button>
-        </Box>
-
-        <Box>
-          {constructQuestion()}
-          <Box sx={{ display: 'flex', justifyContent: 'center', height: '15%' }}>
-            <IconButton
-              component="span"
-              color="primary"
-              aria-label="add question"
-              onClick={addDialogOpen}
-              >
-              <AddBoxOutlinedIcon sx={{ mx: 1, fontSize: '125%' }}/>
-            </IconButton>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <h1>{quizInfo.name}</h1>
+            <Button onClick={editDialogOpen}>
+              <ModeEditOutlineIcon />Edit Quiz
+            </Button>
           </Box>
+
+          <Box>
+            {constructQuestion()}
+            <Box sx={{ display: 'flex', justifyContent: 'center', height: '15%' }}>
+              <IconButton
+                component="span"
+                color="primary"
+                aria-label="add question"
+                onClick={addDialogOpen}
+                >
+                <AddBoxOutlinedIcon sx={{ mx: 1, fontSize: '125%' }}/>
+              </IconButton>
+            </Box>
+          </Box>
+          <EditQuizDialog
+            openEdit={openEdit}
+            onClose={dialogClose}
+            quizInfoUpdate={quizInfoUpdate}
+            />
+          <AddQuestionDialog
+            open={openAdd}
+            onClose={dialogClose}
+            addingQuestion={addQuestion}
+            />
         </Box>
-      </Box>
-      <EditQuizDialog
-        openEdit={openEdit}
-        onClose={dialogClose}
-        quizInfoUpdate={quizInfoUpdate}
-        />
-      <AddQuestionDialog
-        open={openAdd}
-        onClose={dialogClose}
-        addingQuestion={addQuestion}
-        />
+      }
     </Box>
   );
 }

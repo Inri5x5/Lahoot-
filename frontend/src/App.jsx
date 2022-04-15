@@ -17,7 +17,8 @@ function App () {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/edit/quiz/:questId" element={<EditQuiz />} />
+          <Route path="/edit/quiz/:quizId" element={<EditQuiz />} />
+          {/* <Route path="/edit/quiz/:quizId/:questionId" element={<EditQuiz />} /> */}
         </Routes>
       </BrowserRouter>
     </>

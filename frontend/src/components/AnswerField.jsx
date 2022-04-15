@@ -5,6 +5,7 @@ import {
 } from '@mui/material';
 import React from 'react';
 import ClearIcon from '@mui/icons-material/ClearRounded';
+import PropTypes from 'prop-types';
 
 export default function answerField (props) {
   const updateAnswers = props.updateHandler;
@@ -12,7 +13,6 @@ export default function answerField (props) {
   const answerData = props.answer;
   const isDelete = props.isDelete;
   const checkedUpdate = (e) => {
-    console.log(e.target.checked);
     updateAnswers(answerData.id, answerData.answer, e.target.checked);
   }
   const answerUpdate = (e) => {
@@ -23,7 +23,7 @@ export default function answerField (props) {
   }
 
   return (
-    <div key={props.key}>
+    <div key={props.answer.id}>
       <Checkbox sx= {{ mt: 3 }}
         checked={answerData.correct}
         onChange={checkedUpdate}
@@ -44,4 +44,12 @@ export default function answerField (props) {
       }
     </div>
   )
+}
+
+answerField.propTypes = {
+  key: PropTypes.number,
+  isDelete: PropTypes.bool,
+  updateHandler: PropTypes.func,
+  deleteHandler: PropTypes.func,
+  answerField: PropTypes.object,
 }

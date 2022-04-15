@@ -11,6 +11,7 @@ import { APICall } from '../helper-func.js';
 import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
+import Divider from '@mui/material/Divider';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -53,8 +54,13 @@ export default function QuizCard (props) {
               <Typography gutterBottom variant="h5" component="div">
                 {props.quiz.name}
               </Typography>
+              <Divider textAlign="center">Total Time</Divider>
               <Typography variant="body2" color="text.secondary">
-                Click to edit
+                {props.quiz.totalTime} seconds
+              </Typography>
+              <Divider textAlign="center">Number of Questions</Divider>
+              <Typography variant="body2" color="text.secondary">
+                {props.quiz.totalQuestions}
               </Typography>
             </CardContent>
           </CardActionArea>
