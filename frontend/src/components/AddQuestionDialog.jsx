@@ -15,6 +15,7 @@ import {
   Checkbox,
   FormControlLabel,
   Typography,
+  Box,
 } from '@mui/material';
 import { v4 as uuid } from 'uuid';
 import { fileToDataUrl } from '../helper-func.js';
@@ -35,6 +36,24 @@ export default function addQuestionDialog (props) {
   const [questionVideo, setQuestionVideo] = React.useState('');
   const [answers, setAnswers] = React.useState([]);
   const { image, video } = selectMediaType;
+
+  React.useEffect(() => {
+    if (props.open === false) {
+      setAnswers([]);
+      setQuestionVideo('');
+      setQuestionThumbnail('');
+      setMediaType('');
+      setSelectMediaType({
+        image: false,
+        video: false,
+      });
+      setQType(false);
+      setQuestType('singleChoice');
+      setPointWorth(0);
+      setTimeLimit(0);
+      setQuestionName('');
+    }
+  }, [props.open])
 
   const handleImageCheckbox = (event) => {
     setSelectMediaType({
@@ -65,7 +84,7 @@ export default function addQuestionDialog (props) {
     setQType(true);
   };
 
-  const passQuestion = () => {
+  const createQuestion = () => {
     const uId = uuid();
     const newQuestion = {
       id: uId.slice(0, 8),
@@ -77,7 +96,7 @@ export default function addQuestionDialog (props) {
       questionVideo: questionVideo,
       answers: answers,
     }
-    props.addingQuestion(newQuestion)
+    props.addingQuestion(newQuestion);
   }
 
   const updateQuestionThumbnail = (e) => {
@@ -88,33 +107,38 @@ export default function addQuestionDialog (props) {
       })
   }
 
-  // const checkAnswer = () => {
-  //   let numChecked = 0;
-  //   for (let i = 0; i < answers.length; i++) {
-  //     if (answers[i].checked === true) numChecked++;
-  //   }
-  //   if (questionType === 'singleChoice' && numChecked !== 1) {
-  //     return true;
-  //   } else if (questionType === 'multiChoice' && numChecked < 1) {
-  //     return true;
-  //   }
-  //   return false;
+  const checkCorrectAnswer = () => {
+    let numCorrect = 0;
+    for (let i = 0; i < answers.length; i++) {
+      if (answers[i].correct === true) numCorrect++;
+    }
+    if (questionType === 'singleChoice' && numCorrect !== 1) {
+      return true;
+    } else if (questionType === 'multiChoice' && numCorrect < 1) {
+      return true;
+    }
+    return false;
+  }
+
+  // const checkValidDialog = () => {
+
   // }
 
   const updateAnswers = (ansNum, answerIn, selected) => {
-    const updatedAnswers = [...answers];
+    let updatedAnswers = [...answers];
+    updatedAnswers = updatedAnswers.filter((answer) => answer.id !== ansNum)
     const newAnswers = {
-      index: ansNum,
+      id: ansNum,
       answer: answerIn,
       correct: selected,
     }
-    updatedAnswers[ansNum] = newAnswers;
+    updatedAnswers.push(newAnswers);
     setAnswers(updatedAnswers);
   }
 
   const deleteAnswer = (ansNum) => {
     let updatedAnswers = [...answers];
-    updatedAnswers = updatedAnswers.filter((answer) => answer.index !== ansNum)
+    updatedAnswers = updatedAnswers.filter((answer) => answer.id !== ansNum)
     setAnswers(updatedAnswers);
   }
 
@@ -129,7 +153,6 @@ export default function addQuestionDialog (props) {
           required
           error={questionName === ''}
           helperText="Please enter your question"
-          autoFocus
           margin="dense"
           id="questName"
           label="Question"
@@ -140,9 +163,9 @@ export default function addQuestionDialog (props) {
         />
         <TextField
           required
+          defaultValue={0}
           error={timeLimit === 0}
           helperText="Time limit should be greater than zero"
-          autoFocus
           margin="dense"
           id="timeLimit"
           label="Time Limit (seconds)"
@@ -157,7 +180,7 @@ export default function addQuestionDialog (props) {
           }}
         />
         <TextField
-          autoFocus
+          defaultValue={0}
           margin="dense"
           id="pointsWorth"
           label="Points Worth"
@@ -216,7 +239,6 @@ export default function addQuestionDialog (props) {
 
         {(mediaType === 'video') && (
           <TextField
-          autoFocus
           margin="dense"
           id="videoUrl"
           label="Video URL"
@@ -228,44 +250,53 @@ export default function addQuestionDialog (props) {
         />
         )}
 
-        <Typography>
-          Add your answers!
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           <Typography>
-            {(questionType === 'singleChoice') ? 'Please check 1 of the answers' : 'Please check 2 or more of the answers'}
+            Add your answers!
           </Typography>
-        </Typography>
 
-        {
-          answers.map((answer, index) => (
-            <AnswerField
-              key={index}
-              updateHandler={updateAnswers}
-              deleteHandler={deleteAnswer}
-              answer={answer}
-              index={answer.index}
-            />
-          ))
-        }
-
-        {(answers.length < 6) &&
-          (<Button onClick={() => {
-            const newAnswers = [...answers];
-            newAnswers.push({
-              index: answers.length,
-              answer: '',
-              correct: false,
-            });
-            setAnswers(newAnswers);
-          }}>
-            Add
-          </Button>)
-        }
+          <FormControl
+            required
+            error={checkCorrectAnswer()}
+            component="fieldset"
+            variant="standard"
+          >
+            <FormLabel component="legend"> {(questionType === 'singleChoice') ? 'Please check 1 of the answers ' : 'Please check 2 or more of the answers '} as the correct answer(s)</FormLabel>
+            <FormGroup>
+              {
+                answers.map((answer, index) => (
+                  <AnswerField
+                    key={index}
+                    updateHandler={updateAnswers}
+                    deleteHandler={deleteAnswer}
+                    answer={answer}
+                  />
+                ))
+              }
+            </FormGroup>
+          </FormControl>
+          {(answers.length < 6) &&
+            (<Button onClick={() => {
+              const newAnswers = [...answers];
+              const uId = uuid();
+              console.log('test ' + uId);
+              newAnswers.push({
+                id: uId.slice(0, 8),
+                answer: '',
+                correct: false,
+              });
+              setAnswers(newAnswers);
+            }}>
+              Add
+            </Button>)
+          }
+        </Box>
 
       </DialogContent>
 
       <DialogActions>
         <Button onClick={props.onClose}>Cancel</Button>
-        <Button onClick={passQuestion}>Add</Button>
+        <Button onClick={createQuestion}>Add</Button>
       </DialogActions>
     </Dialog>
   )
