@@ -36,10 +36,20 @@ export default function addQuestionDialog (props) {
   const [questionVideo, setQuestionVideo] = React.useState('');
   const [answers, setAnswers] = React.useState([]);
   const { image, video } = selectMediaType;
+  const [answerIndex, setAnswersIndex] = React.useState(2);
 
   React.useEffect(() => {
     if (props.open === false) {
-      setAnswers([]);
+      setAnswersIndex(2);
+      const initialAnswers = []
+      for (let i = 0; i < 2; i++) {
+        initialAnswers.push({
+          id: i,
+          answer: '',
+          correct: false,
+        });
+      }
+      setAnswers(initialAnswers);
       setQuestionVideo('');
       setQuestionThumbnail('');
       setMediaType('');
@@ -96,7 +106,7 @@ export default function addQuestionDialog (props) {
       questionVideo: questionVideo,
       answers: answers,
     }
-    props.addingQuestion(newQuestion);
+    if (checkValidDialog(newQuestion)) props.addingQuestion(newQuestion);
   }
 
   const updateQuestionThumbnail = (e) => {
@@ -114,15 +124,17 @@ export default function addQuestionDialog (props) {
     }
     if (questionType === 'singleChoice' && numCorrect !== 1) {
       return true;
-    } else if (questionType === 'multiChoice' && numCorrect < 1) {
+    } else if (questionType === 'multiChoice' && numCorrect < 2) {
       return true;
     }
     return false;
   }
 
-  // const checkValidDialog = () => {
-
-  // }
+  const checkValidDialog = (newQuestion) => {
+    if (newQuestion.question === '') return false;
+    if (newQuestion.timeLimit === 0) return false;
+    return !checkCorrectAnswer();
+  }
 
   const updateAnswers = (ansNum, answerIn, selected) => {
     let updatedAnswers = [...answers];
@@ -133,6 +145,7 @@ export default function addQuestionDialog (props) {
       correct: selected,
     }
     updatedAnswers.push(newAnswers);
+    updatedAnswers.sort((a, b) => a.id - b.id)
     setAnswers(updatedAnswers);
   }
 
@@ -264,27 +277,33 @@ export default function addQuestionDialog (props) {
             <FormLabel component="legend"> {(questionType === 'singleChoice') ? 'Please check 1 of the answers ' : 'Please check 2 or more of the answers '} as the correct answer(s)</FormLabel>
             <FormGroup>
               {
-                answers.map((answer, index) => (
-                  <AnswerField
-                    key={index}
-                    updateHandler={updateAnswers}
-                    deleteHandler={deleteAnswer}
-                    answer={answer}
-                  />
-                ))
+                answers.map((answer, index) => {
+                  let possibleDelete = false;
+                  if (index >= 2) {
+                    possibleDelete = true;
+                  }
+                  return (
+                    <AnswerField
+                      key={answer.id}
+                      updateHandler={updateAnswers}
+                      deleteHandler={deleteAnswer}
+                      answer={answer}
+                      isDelete={possibleDelete}
+                    />
+                  )
+                })
               }
             </FormGroup>
           </FormControl>
           {(answers.length < 6) &&
             (<Button onClick={() => {
               const newAnswers = [...answers];
-              const uId = uuid();
-              console.log('test ' + uId);
               newAnswers.push({
-                id: uId.slice(0, 8),
+                id: answerIndex,
                 answer: '',
                 correct: false,
               });
+              setAnswersIndex(answerIndex + 1);
               setAnswers(newAnswers);
             }}>
               Add

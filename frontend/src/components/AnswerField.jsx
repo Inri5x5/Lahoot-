@@ -10,22 +10,15 @@ export default function answerField (props) {
   const updateAnswers = props.updateHandler;
   const deleteAnswer = props.deleteHandler;
   const answerData = props.answer;
-
+  const isDelete = props.isDelete;
   const checkedUpdate = (e) => {
-    console.log(answerData.id)
-    console.log(answerData)
+    console.log(e.target.checked);
     updateAnswers(answerData.id, answerData.answer, e.target.checked);
   }
-
   const answerUpdate = (e) => {
-    console.log(answerData.id)
-    console.log(answerData)
     updateAnswers(answerData.id, e.target.value, answerData.correct);
   }
-
   const deleteAns = () => {
-    console.log(answerData.id)
-    console.log(answerData)
     deleteAnswer(answerData.id);
   }
 
@@ -33,7 +26,7 @@ export default function answerField (props) {
     <div key={props.key}>
       <Checkbox sx= {{ mt: 3 }}
         checked={answerData.correct}
-        onBlur={checkedUpdate}
+        onChange={checkedUpdate}
       />
       <TextField
         defaultValue={answerData.answer}
@@ -44,9 +37,11 @@ export default function answerField (props) {
         variant="standard"
         onBlur={answerUpdate}
       />
+      { isDelete &&
       <Button sx= {{ mt: 3 }} onClick={deleteAns}>
         <ClearIcon />
       </Button>
+      }
     </div>
   )
 }
