@@ -60,13 +60,12 @@ function Dashboard () {
       </Box>
       </>)
     }
-    const cards = quizzes.map((quiz, i) => {
-      return (<QuizCard quiz={quiz} key={i} modifyQuizzes={getQuestions}/>);
-    });
     return (
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-          {cards}
+          {quizzes.map((quiz, i) => {
+            return (<QuizCard quiz={quiz} key={i} modifyQuizzes={getQuestions}/>);
+          })}
         </Grid>
       </Box>
     );
