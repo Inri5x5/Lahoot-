@@ -18,7 +18,7 @@ function App () {
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/edit/quiz/:quizId" element={<EditQuiz />} />
-          {/* <Route path="/edit/quiz/:quizId/:questionId" element={<EditQuiz />} /> */}
+          <Route path="/edit/quiz/:quizId/:questionId" element={<EditQuiz />} />
         </Routes>
       </BrowserRouter>
     </>

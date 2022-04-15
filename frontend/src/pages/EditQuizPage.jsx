@@ -11,8 +11,8 @@ import EditQuizDialog from '../components/EditQuizDialog';
 import Loading from '../components/Loading';
 
 export default function EditQuizCard () {
-  const params = useParams();
-  const quizId = params.quizId;
+  const { quizId, questionId } = useParams();
+  console.log(quizId + ' kkk ' + questionId);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const [quizInfo, setQuizinfo] = React.useState({ questions: [] });
@@ -65,6 +65,7 @@ export default function EditQuizCard () {
     } catch (err) {
       alert(err);
       setLoading(false);
+      navigate('/dashboard');
     }
   }
 
