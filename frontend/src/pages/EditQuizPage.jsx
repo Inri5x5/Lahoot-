@@ -6,13 +6,12 @@ import QuestionCard from '../components/QuestionCard';
 import { APICall } from '../helper-func.js';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
-import AddQuestionDialog from '../components/AddQuestionDialog';
+import AddQuestionDialog from '../components/ModifyQuestionDialog';
 import EditQuizDialog from '../components/EditQuizDialog';
 import Loading from '../components/Loading';
 
 export default function EditQuizCard () {
-  const { quizId, questionId } = useParams();
-  console.log(quizId + ' kkk ' + questionId);
+  const { quizId } = useParams();
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const [quizInfo, setQuizinfo] = React.useState({ questions: [] });
@@ -123,6 +122,7 @@ export default function EditQuizCard () {
         key={i}
         quizUpdate={updateQuiz}
         quiz={quizInfo}
+        updateQuestion={() => { navigate(`/edit/quiz/${quizId}/${question.id}`) }}
         />)
     })
     return (

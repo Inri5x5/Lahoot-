@@ -20,8 +20,9 @@ import {
 import { v4 as uuid } from 'uuid';
 import { fileToDataUrl } from '../helper-func.js';
 import AnswerField from './AnswerField.jsx';
+import PropTypes from 'prop-types';
 
-export default function addQuestionDialog (props) {
+export default function ModifyQuestionDialog (props) {
   const [questionName, setQuestionName] = React.useState('');
   const [timeLimit, setTimeLimit] = React.useState(0);
   const [pointsWorth, setPointWorth] = React.useState(0);
@@ -36,14 +37,39 @@ export default function addQuestionDialog (props) {
   const [questionVideo, setQuestionVideo] = React.useState('');
   const [answers, setAnswers] = React.useState([]);
   const { image, video } = selectMediaType;
+  const [isEdit, setIsEdit] = React.useState(false);
 
   React.useEffect(() => {
-    if (props.open === false) {
+    if ('modifiedQuestion' in props) setIsEdit(true);
+
+    if (isEdit) {
       const initialAnswers = []
       for (let i = 0; i < 2; i++) {
         initialAnswers.push({
-          id: -1,
-          answer: '',
+          id: i,
+          answer: 'Sample Answer',
+          correct: false,
+        });
+      }
+      setAnswers(initialAnswers);
+      setQuestionVideo('');
+      setQuestionThumbnail('');
+      setMediaType('');
+      setSelectMediaType({
+        image: false,
+        video: false,
+      });
+      setQType(false);
+      setQuestType('singleChoice');
+      setPointWorth(0);
+      setTimeLimit(0);
+      setQuestionName('');
+    } else {
+      const initialAnswers = []
+      for (let i = 0; i < 2; i++) {
+        initialAnswers.push({
+          id: i,
+          answer: 'Sample Answer',
           correct: false,
         });
       }
@@ -134,32 +160,38 @@ export default function addQuestionDialog (props) {
     return !checkCorrectAnswer();
   }
 
-  const updateAnswers = (ansNum, answerIn, selected) => {
-    let updatedAnswers = [...answers];
-    updatedAnswers = updatedAnswers.filter((answer) => answer.id !== ansNum)
-    const newAnswers = {
-      id: ansNum,
-      answer: answerIn,
-      correct: selected,
-    }
-    updatedAnswers.push(newAnswers);
-    updatedAnswers.sort((a, b) => a.id - b.id)
-    setAnswers(updatedAnswers);
-  }
-
-  const deleteAnswer = (ansNum) => {
-    let updatedAnswers = [...answers];
-    updatedAnswers = updatedAnswers.filter((answer) => answer.id !== ansNum)
-    setAnswers(updatedAnswers);
+  const constructAnswers = () => {
+    const answerFields = answers.map((answer, index) => {
+      answer.id = index;
+      let possibleDelete = false;
+      if (index > 1) {
+        possibleDelete = true;
+      }
+      return (
+        <AnswerField
+        key={index}
+        id={answer.id}
+        answerText={answer.answer}
+        isCorrect={answer.correct}
+        updateAnswers={setAnswers}
+        allAnswers={answers}
+        isDelete={possibleDelete}
+        />
+      )
+    })
+    return (
+      <FormGroup>
+        {answerFields}
+      </FormGroup>
+    )
   }
 
   return (
     <Dialog PaperProps={{ sx: { width: '60%', height: '60%' } }}
       open={props.open} onClose={props.onClose}>
-      <DialogTitle>Adding Question</DialogTitle>
+      <DialogTitle> {(isEdit) ? 'Edit Question' : 'Add Question'} </DialogTitle>
 
       <DialogContent>
-
         <TextField
           required
           error={questionName === ''}
@@ -273,33 +305,14 @@ export default function addQuestionDialog (props) {
             variant="standard"
           >
             <FormLabel component="legend"> {(questionType === 'singleChoice') ? 'Please check 1 of the answers ' : 'Please check 2 or more of the answers '} as the correct answer(s)</FormLabel>
-            <FormGroup>
-              {
-                answers.map((answer, index) => {
-                  answer.id = index;
-                  let possibleDelete = false;
-                  if (index >= 2) {
-                    possibleDelete = true;
-                  }
-                  return (
-                    <AnswerField
-                      key={answer.id}
-                      updateHandler={updateAnswers}
-                      deleteHandler={deleteAnswer}
-                      answer={answer}
-                      isDelete={possibleDelete}
-                    />
-                  )
-                })
-              }
-            </FormGroup>
+            {constructAnswers()}
           </FormControl>
           {(answers.length < 6) &&
             (<Button onClick={() => {
               const newAnswers = [...answers];
               newAnswers.push({
                 id: -1,
-                answer: '',
+                answer: 'Sample Answer',
                 correct: false,
               });
               setAnswers(newAnswers);
@@ -317,4 +330,11 @@ export default function addQuestionDialog (props) {
       </DialogActions>
     </Dialog>
   )
+}
+
+ModifyQuestionDialog.propTypes = {
+  open: PropTypes.bool,
+  onClose: PropTypes.func,
+  addingQuestion: PropTypes.func,
+  modifiedQuestion: PropTypes.object,
 }
