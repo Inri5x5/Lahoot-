@@ -16,6 +16,7 @@ export default function EditQuestionPage () {
   const [quizName, setQuizName] = React.useState('');
   const [quizThumbnail, setQuizThumbnail] = React.useState('');
 
+  console.log('this is edit question page')
   const getQuestion = async () => {
     try {
       setLoading(true);
@@ -29,7 +30,6 @@ export default function EditQuestionPage () {
       }
       let found = false;
       let i = 0;
-      console.log(data.questions)
       for (; i < data.questions.length; i++) {
         if (data.questions[i].id === questionId) {
           found = true;
@@ -51,7 +51,6 @@ export default function EditQuestionPage () {
       navigate('/dashboard');
     }
   }
-
   React.useEffect(() => {
     if (!token) {
       navigate('/')
