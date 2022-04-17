@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Divider from '@mui/material/Divider';
+import defaultQuestion from '../assets/defaultQuestion.jpg'
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -37,7 +38,7 @@ export default function QuestionCard (props) {
           <CardMedia
             component="img"
             height="100"
-            image={props.question.questionAttachment}
+            image={(props.question.mediaType === null) ? defaultQuestion : props.question.questionAttachment}
             alt={'question' + props.question.id + ' thumbnail'}
           />
           <CardContent>

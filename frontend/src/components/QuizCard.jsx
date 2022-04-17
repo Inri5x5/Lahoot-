@@ -22,6 +22,7 @@ import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import StopIcon from '@mui/icons-material/StopRounded';
 import StartIcon from '@mui/icons-material/PlayArrowRounded';
+import defaultQuiz from '../assets/defaultQuiz.jpg'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -82,14 +83,11 @@ export default function QuizCard (props) {
       if (data.error) {
         throw new Error(data.error);
       }
-      let updatedQuizzes = [...props.allQuizzes]
-      updatedQuizzes = updatedQuizzes.filter((quiz) => quiz.id !== id)
-      props.modifyQuizzes(updatedQuizzes)
+      props.modifyQuizzes()
     } catch (err) {
       console.log(err);
     }
   }
-
   return (
     <>
       <Grid item xs={2} sm={4} md={4} key={props.index}>
@@ -99,7 +97,7 @@ export default function QuizCard (props) {
               <CardMedia
                 component="img"
                 height="140"
-                image={props.quiz.thumbnail}
+                image={(props.quiz.thumbnail === null || props.quiz.thumbnail === 'empty') ? defaultQuiz : props.quiz.thumbnail}
                 alt={props.quiz.name + ' thumbnail'}
               />
               <CardContent>
@@ -161,5 +159,4 @@ QuizCard.propTypes = {
   quiz: PropTypes.object,
   index: PropTypes.number,
   modifyQuizzes: PropTypes.func,
-  allQuizzes: PropTypes.array,
 }

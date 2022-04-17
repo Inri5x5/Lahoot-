@@ -15,12 +15,16 @@ export default function editQuizDialog (props) {
       })
   }
 
+  const deleteQuizThumbnail = () => {
+    setQuizThumbnail('empty')
+  }
+
   return (
-    <Dialog PaperProps={{ sx: { width: '45%', height: '35%' } }}
+    <Dialog PaperProps={{ sx: { width: '45%', height: '45%' } }}
       open={props.openEdit} onClose={props.onClose}>
       <DialogTitle>Edit your Quiz</DialogTitle>
       <DialogContent>
-        <TextField
+        <TextField sx={{ mb: 5 }}
           autoFocus
           margin="dense"
           id="name"
@@ -34,14 +38,22 @@ export default function editQuizDialog (props) {
           <Button
             variant= "contained"
             component= "label"
+            sx={{ mb: 1 }}
           >
             Upload Thumbnail
             <input
               type= "file"
               accept="image/*"
-              style={{ display: 'none' }}
+              hidden
               onChange={updateQuizThumbnail}
             />
+          </Button>
+          <Button
+            variant= "contained"
+            component= "label"
+            onClick={deleteQuizThumbnail}
+          >
+            Delete Thumbnail
           </Button>
         </div>
       </DialogContent>

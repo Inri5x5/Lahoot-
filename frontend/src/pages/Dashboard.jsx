@@ -20,7 +20,7 @@ function Dashboard () {
 
   const [quizzes, setQuizzes] = React.useState([]);
 
-  const getQuizzzes = async () => {
+  const getQuizzes = async () => {
     try {
       const headers = {
         'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ function Dashboard () {
 
   // Get the initial quizzes from database
   React.useEffect(() => {
-    getQuizzzes();
+    getQuizzes();
   }, []);
 
   // Render the quizzes
@@ -72,8 +72,7 @@ function Dashboard () {
               <QuizCard
                 quiz={quiz}
                 key={i}
-                modifyQuizzes={setQuizzes}
-                allQuizzes={quizzes}
+                modifyQuizzes={getQuizzes}
               />);
           })}
         </Grid>
@@ -83,7 +82,7 @@ function Dashboard () {
 
   return (<>
     <Box sx={{ display: 'flex' }}>
-      <DashboardNav modifyQuizzes={getQuizzzes}></DashboardNav>
+      <DashboardNav modifyQuizzes={getQuizzes}></DashboardNav>
       <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 10 }}>
         {constructQuiz()}
       </Box>

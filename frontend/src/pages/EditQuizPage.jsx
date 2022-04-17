@@ -8,6 +8,7 @@ import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import AddQuestionDialog from '../components/AddQuestionDialog';
 import EditQuizDialog from '../components/EditQuizDialog';
+import defaultQuiz from '../assets/defaultQuiz.jpg'
 
 export default function EditQuizPage () {
   const { quizId } = useParams();
@@ -44,6 +45,7 @@ export default function EditQuizPage () {
       name: (!updateName.trim()) ? quizInfo.name : updateName,
       thumbnail: quizThumbnail
     }
+    console.log(body)
     updateQuiz(body);
     dialogClose();
   }
@@ -127,7 +129,7 @@ export default function EditQuizPage () {
           <Card>
             <CardMedia
               component="img"
-              image={quizInfo.thumbnail}
+              image={(quizInfo.thumbnail === null || quizInfo.thumbnail === 'empty') ? defaultQuiz : quizInfo.thumbnail}
               alt={quizInfo.name + ' thumbnail'}
               height="150"
               maxwidth="150"
