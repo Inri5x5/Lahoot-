@@ -1,17 +1,27 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { CardActionArea, CardActions, Button } from '@mui/material';
+import {
+  CardActionArea,
+  CardActions,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Paper,
+  Grid,
+  Divider,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@mui/material';
 import { experimentalStyled as styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { APICall } from '../helper-func.js';
-import Grid from '@mui/material/Grid';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import Divider from '@mui/material/Divider';
+import StopIcon from '@mui/icons-material/StopRounded';
+import StartIcon from '@mui/icons-material/PlayArrowRounded';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -22,6 +32,46 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function QuizCard (props) {
   const navigate = useNavigate();
+  const [quizActive, setQuizActive] = React.useState(false);
+  const [openNotif, setOpenNotif] = React.useState(false);
+
+  const startQuiz = () => {
+    setQuizActive(true);
+    updateQuiz();
+    notifOpen();
+  }
+
+  const stopQuiz = () => {
+    setQuizActive(false);
+    updateQuiz();
+    notifOpen();
+  }
+
+  const notifOpen = () => {
+    setOpenNotif(true);
+  }
+
+  const notifClose = () => {
+    setOpenNotif(false);
+  }
+
+  const updateQuiz = async () => {
+    const updatedQuiz = props.quiz;
+    updatedQuiz.active = quizActive;
+    console.log(updatedQuiz);
+    try {
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
+      };
+      const data = await APICall(updatedQuiz, `/admin/quiz/${props.quiz.id}`, 'PUT', headers);
+      if (data.error) {
+        throw new Error(data.error);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   const deleteQuiz = async (id) => {
     try {
@@ -68,9 +118,37 @@ export default function QuizCard (props) {
             <Button onClick={() => deleteQuiz(props.quiz.id)}>
               <DeleteIcon />
             </Button>
+            { !quizActive &&
+            <Button onClick={startQuiz}>
+              <StartIcon /> Start Quiz
+            </Button>
+            }
+            { quizActive &&
+            <Button onClick={stopQuiz}>
+              <StopIcon /> Stop Quiz
+            </Button>
+            }
           </CardActions>
         </Card>
       </Item>
+      <Dialog PaperProps={{ sx: { width: '45%', height: '35%' } }}
+      open={openNotif} onClose={notifClose}>
+      <DialogTitle>Session {props.quiz.id} is now Active!</DialogTitle>
+      <DialogContent>
+        <div>
+          <Button
+            variant= "contained"
+            component= "label"
+            onClick={ () => { navigator.clipboard.writeText(`${window.location.hostname}/play/join/${props.quiz.id}`) }}
+          >
+            Copy Link!
+          </Button>
+        </div>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={notifClose}>Close</Button>
+      </DialogActions>
+    </Dialog>
     </Grid>
   );
 }

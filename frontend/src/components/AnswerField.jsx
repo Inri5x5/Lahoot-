@@ -39,8 +39,6 @@ export default function answerField (props) {
     let updatedAnswers = [...props.allAnswers];
     for (let i = 0; i < updatedAnswers.length; i++) {
       if (i === props.id && i++ < updatedAnswers.length) {
-        console.log(i)
-        console.log(updatedAnswers[i].answer)
         setText(updatedAnswers[i].answer);
         break;
       }
