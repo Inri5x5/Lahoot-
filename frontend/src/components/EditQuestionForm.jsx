@@ -13,23 +13,19 @@ import {
   Typography,
   Box,
 } from '@mui/material';
-import { v4 as uuid } from 'uuid';
-import { fileToDataUrl } from '../helper-func.js';
+import { fileToDataUrl, APICall } from '../helper-func.js';
 import AnswerField from './AnswerField.jsx';
 import PropTypes from 'prop-types';
 
 export default function EditQuestionForm (props) {
-  if (props === undefined) return;
-  console.log(props)
-
-  const [questionName, setQuestionName] = React.useState(props.modifiedQuestion.question);
-  const [timeLimit, setTimeLimit] = React.useState(props.modifiedQuestion.timeLimit);
-  const [pointsWorth, setPointWorth] = React.useState(props.modifiedQuestion.points);
-  const [questionType, setQuestType] = React.useState(props.modifiedQuestion.questionType);
-  const [mediaType, setMediaType] = React.useState(props.modifiedQuestion.mediaType);
+  const [questionName, setQuestionName] = React.useState(props.selectedQuestion.question);
+  const [timeLimit, setTimeLimit] = React.useState(props.selectedQuestion.timeLimit);
+  const [pointsWorth, setPointWorth] = React.useState(props.selectedQuestion.points);
+  const [questionType, setQuestType] = React.useState(props.selectedQuestion.questionType);
+  const [mediaType, setMediaType] = React.useState(props.selectedQuestion.mediaType);
   const [questionThumbnail, setQuestionThumbnail] = React.useState('');
-  const [questionVideo, setQuestionVideo] = React.useState((mediaType === 'video') ? props.modifiedQuestion.questionAttachment : '');
-  const [answers, setAnswers] = React.useState(props.modifiedQuestion.answers);
+  const [questionVideo, setQuestionVideo] = React.useState((mediaType === 'video') ? props.selectedQuestion.questionAttachment : '');
+  const [answers, setAnswers] = React.useState(props.selectedQuestion.answers);
 
   const [openQType, setQType] = React.useState(false);
   const imageStat = (mediaType === 'image');
@@ -38,39 +34,28 @@ export default function EditQuestionForm (props) {
     image: imageStat,
     video: videoStat,
   });
-  // React.useEffect(() => {
-  //     console.log('yyyy')
-  //     const initialAnswers = []
-  //     for (let i = 0; i < props.modifiedQuestion.answers.length; i++) {
-  //         initialAnswers.push({
-  //             id: props.modifiedQuestion.answers[i].id,
-  //             answer: props.modifiedQuestion.answers[i].answer,
-  //             correct: props.modifiedQuestion.answers[i].correct,
-  //           });
-  //         }
-  //   setAnswers(initialAnswers);
-  //   setQuestionVideo(props.modifiedQuestion.questionVideo);
-  //   setQuestionThumbnail(props.modifiedQuestion.questionThumbnail);
-  //   let imageStat = true;
-  //   if (props.modifiedQuestion.questionThumbnail === '') imageStat = false;
-  //   let videoStat = true;
-  //   if (props.modifiedQuestion.questionVideo === '') videoStat = false;
-  //   setSelectMediaType({
-  //     image: imageStat,
-  //     video: videoStat,
-  //   });
-  //   setMediaType(() => {
-  //     if (videoStat) return 'video';
-  //     if (imageStat) return 'image';
-  //     return ''
-  //   });
-  //   setQType(false);
-  //   setQuestType(props.modifiedQuestion.questionType);
-  //   console.log(props.modifiedQuestion.points);
-  //   setPointWorth(props.modifiedQuestion.points);
-  //   setTimeLimit(props.modifiedQuestion.timeLimit);
-  //   setQuestionName(props.modifiedQuestion.question);
-  // }, [])
+
+  const modifyQuestion = async (newQuestion) => {
+    try {
+      let updatedQuestions = [...props.allQuestions]
+      updatedQuestions = updatedQuestions.filter((question) => question.id !== newQuestion.id)
+      updatedQuestions.push(newQuestion)
+      const body = {
+        questions: updatedQuestions,
+      }
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
+      };
+      const data = await APICall(body, `/admin/quiz/${props.quizId}`, 'PUT', headers);
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      props.afterModified(updatedQuestions)
+    } catch (err) {
+      alert(err);
+    }
+  }
 
   const handleImageCheckbox = (event) => {
     setSelectMediaType({
@@ -102,18 +87,22 @@ export default function EditQuestionForm (props) {
   };
 
   const createQuestion = () => {
-    const uId = uuid();
+    let attachment = '';
+    if (mediaType === 'video') attachment = questionVideo;
+    if (mediaType === 'image') attachment = questionThumbnail;
     const newQuestion = {
-      id: uId.slice(0, 8),
+      id: props.selectedQuestion.id,
       question: questionName,
       timeLimit: timeLimit,
       points: pointsWorth,
       questionType: questionType,
-      questionThumbnail: questionThumbnail,
-      questionVideo: questionVideo,
+      mediaType: mediaType,
+      questionAttachment: attachment,
       answers: answers,
     }
-    if (checkValidDialog(newQuestion)) props.addingQuestion(newQuestion);
+    if (checkValidDialog(newQuestion)) {
+      modifyQuestion(newQuestion);
+    }
   }
 
   const updateQuestionThumbnail = (e) => {
@@ -172,8 +161,8 @@ export default function EditQuestionForm (props) {
   }
 
   return (
-    <Box PaperProps={{ sx: { width: '60%', height: '60%' } }}>
-      <Typography> Edit Question </Typography>
+    <Box>
+      <Typography> {(props.isAdd) ? 'Add Question' : 'Edit Question'} </Typography>
       <TextField
         required
         defaultValue={questionName}
@@ -306,8 +295,8 @@ export default function EditQuestionForm (props) {
         }
       </Box>
       <Box>
-        <Button onClick={props.onClose}>Cancel</Button>
-        <Button onClick={createQuestion}>Add</Button>
+        <Button onClick={props.cancelModified}>Cancel</Button>
+        <Button onClick={createQuestion}>{(props.isAdd) ? 'Create' : 'Edit'}</Button>
       </Box>
     </Box>
   )
@@ -315,6 +304,10 @@ export default function EditQuestionForm (props) {
 
 EditQuestionForm.propTypes = {
   onClose: PropTypes.func,
-  addingQuestion: PropTypes.func,
-  modifiedQuestion: PropTypes.object,
+  selectedQuestion: PropTypes.object,
+  allQuestions: PropTypes.array,
+  quizId: PropTypes.string,
+  afterModified: PropTypes.func,
+  cancelModified: PropTypes.func,
+  isAdd: PropTypes.bool,
 }

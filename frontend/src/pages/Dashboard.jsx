@@ -5,7 +5,6 @@ import QuizCard from '../components/QuizCard';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
 import { APICall } from '../helper-func.js';
-import Loading from '../components/Loading';
 import Typography from '@mui/material/Typography';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
@@ -19,11 +18,9 @@ function Dashboard () {
     }
   });
 
-  const [loading, setLoading] = React.useState(false);
   const [quizzes, setQuizzes] = React.useState([]);
 
   const getQuizzzes = async () => {
-    setLoading(true);
     try {
       const headers = {
         'Content-Type': 'application/json',
@@ -42,10 +39,8 @@ function Dashboard () {
         newQuizzes[i].totalTime = totalTime
       }
       setQuizzes(newQuizzes);
-      setLoading(false);
     } catch (err) {
       alert(err);
-      setLoading(false);
     }
   }
 
@@ -72,8 +67,14 @@ function Dashboard () {
     return (
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-          {quizzes.map((quiz, i) => {
-            return (<QuizCard quiz={quiz} key={i} modifyQuizzes={getQuizzzes}/>);
+          {quizzes.sort((a, b) => a.name > b.name ? 1 : -1).map((quiz, i) => {
+            return (
+              <QuizCard
+                quiz={quiz}
+                key={i}
+                modifyQuizzes={setQuizzes}
+                allQuizzes={quizzes}
+              />);
           })}
         </Grid>
       </Box>
@@ -84,8 +85,7 @@ function Dashboard () {
     <Box sx={{ display: 'flex' }}>
       <DashboardNav modifyQuizzes={getQuizzzes}></DashboardNav>
       <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 10 }}>
-        {loading && <Loading></Loading>}
-        {!loading && constructQuiz()}
+        {constructQuiz()}
       </Box>
     </Box>
   </>

@@ -83,7 +83,9 @@ export default function QuizCard (props) {
       if (data.error) {
         throw new Error(data.error);
       }
-      props.modifyQuizzes();
+      let updatedQuizzes = [...props.allQuizzes]
+      updatedQuizzes = updatedQuizzes.filter((quiz) => quiz.id !== id)
+      props.modifyQuizzes(updatedQuizzes)
     } catch (err) {
       console.log(err);
     }
@@ -157,4 +159,5 @@ QuizCard.propTypes = {
   quiz: PropTypes.object,
   index: PropTypes.number,
   modifyQuizzes: PropTypes.func,
+  allQuizzes: PropTypes.array,
 }
