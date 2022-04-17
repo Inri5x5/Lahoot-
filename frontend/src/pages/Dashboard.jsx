@@ -66,7 +66,7 @@ function Dashboard () {
     }
     return (
       <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 8, md: 12 }}>
           {quizzes.sort((a, b) => a.name > b.name ? 1 : -1).map((quiz, i) => {
             return (
               <QuizCard
