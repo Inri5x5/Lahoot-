@@ -4,11 +4,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import DashboardNavBar from '../components/DashboardNav';
 import { APICall } from '../helper-func.js';
 import EditQuestionForm from '../components/EditQuestionForm.jsx';
+import Loading from '../components/Loading';
 
 export default function EditQuestionPage () {
   const { quizId, questionId } = useParams();
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
+  const [loading, setLoading] = React.useState(false);
   const [questions, setQuestions] = React.useState([]);
   const [selectedQuestion, setSelectedQuestion] = React.useState({});
 
@@ -20,6 +22,7 @@ export default function EditQuestionPage () {
 
   const getQuestion = async () => {
     try {
+      setLoading(true);
       const headers = {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
@@ -42,9 +45,11 @@ export default function EditQuestionPage () {
       const newQuestions = [...data.questions]
       setQuestions(newQuestions)
       setSelectedQuestion(data.questions[i]);
+      setLoading(false);
     } catch (err) {
       alert(err);
       console.log(err);
+      setLoading(false);
       navigate('/dashboard');
     }
   }
@@ -57,14 +62,17 @@ export default function EditQuestionPage () {
     <Box sx={{ display: 'flex' }}>
       <DashboardNavBar></DashboardNavBar>
       <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 10 }}>
-        <EditQuestionForm
-          isAdd={false}
-          allQuestions={questions}
-          selectedQuestion={selectedQuestion}
-          quizId={quizId}
-          afterModified={() => { navigate(`/edit/quiz/${quizId}`) }}
-          cancelModified={() => { navigate(`/edit/quiz/${quizId}`) }}
-        />
+        {loading && <Loading></Loading>}
+        {!loading &&
+          <EditQuestionForm
+            isAdd={false}
+            allQuestions={questions}
+            selectedQuestion={selectedQuestion}
+            quizId={quizId}
+            afterModified={() => { navigate(`/edit/quiz/${quizId}`) }}
+            cancelModified={() => { navigate(`/edit/quiz/${quizId}`) }}
+          />
+        }
       </Box>
     </Box>
   );

@@ -9,8 +9,8 @@ import EditQuestionForm from './EditQuestionForm.jsx';
 
 export default function AddQuestionDialog (props) {
   const uId = uuid();
-  const afterModified = (allQuestions) => {
-    props.addQuestion(allQuestions);
+  const afterModified = (updatedQuestions) => {
+    props.modifyQuiz(updatedQuestions);
     props.onClose();
   }
   const newQuestion = {
@@ -53,5 +53,5 @@ AddQuestionDialog.propTypes = {
   onClose: PropTypes.func,
   allQuestions: PropTypes.array,
   quizId: PropTypes.string,
-  addQuestion: PropTypes.func,
+  modifyQuiz: PropTypes.func,
 }

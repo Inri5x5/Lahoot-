@@ -44,7 +44,6 @@ export default function QuizCard (props) {
   const stopQuiz = () => {
     setQuizActive(false);
     updateQuiz();
-    notifOpen();
   }
 
   const notifOpen = () => {
@@ -92,66 +91,69 @@ export default function QuizCard (props) {
   }
 
   return (
-    <Grid item xs={2} sm={4} md={4} key={props.index}>
-      <Item>
-        <Card>
-          <CardActionArea onClick={() => navigate(`/edit/quiz/${props.quiz.id}`)} >
-            <CardMedia
-              component="img"
-              height="140"
-              image={props.quiz.thumbnail}
-              alt={props.quiz.name + ' thumbnail'}
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                {props.quiz.name}
-              </Typography>
-              <Divider textAlign="center">Total Time</Divider>
-              <Typography variant="body2" color="text.secondary">
-                {props.quiz.totalTime} seconds
-              </Typography>
-              <Divider textAlign="center">Number of Questions</Divider>
-              <Typography variant="body2" color="text.secondary">
-                {props.quiz.totalQuestions}
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-          <CardActions>
-            <Button onClick={() => deleteQuiz(props.quiz.id)}>
-              <DeleteIcon />
+    <>
+      <Grid item xs={2} sm={4} md={4} key={props.index}>
+        <Item>
+          <Card>
+            <CardActionArea onClick={() => navigate(`/edit/quiz/${props.quiz.id}`)} >
+              <CardMedia
+                component="img"
+                height="140"
+                image={props.quiz.thumbnail}
+                alt={props.quiz.name + ' thumbnail'}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {props.quiz.name}
+                </Typography>
+                <Divider textAlign="center">Total Time</Divider>
+                <Typography variant="body2" color="text.secondary">
+                  {props.quiz.totalTime} seconds
+                </Typography>
+                <Divider textAlign="center">Number of Questions</Divider>
+                <Typography variant="body2" color="text.secondary">
+                  {props.quiz.totalQuestions}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+            <CardActions>
+              <Button onClick={() => deleteQuiz(props.quiz.id)}>
+                <DeleteIcon />
+              </Button>
+              { !quizActive &&
+              <Button onClick={startQuiz}>
+                <StartIcon /> Start Quiz
+              </Button>
+              }
+              { quizActive &&
+              <Button onClick={stopQuiz}>
+                <StopIcon /> Stop Quiz
+              </Button>
+              }
+            </CardActions>
+          </Card>
+        </Item>
+      </Grid>
+
+      <Dialog PaperProps={{ sx: { width: '45%' } }}
+        open={openNotif} onClose={notifClose}>
+        <DialogTitle>Session {props.quiz.id} is now Active!</DialogTitle>
+        <DialogContent>
+          <div>
+            <Button
+              variant= "contained"
+              component= "label"
+              onClick={ () => { navigator.clipboard.writeText(`${window.location.hostname}/${window.location.port}/play/join/${props.quiz.id}`) }}
+            >
+              Copy Link!
             </Button>
-            { !quizActive &&
-            <Button onClick={startQuiz}>
-              <StartIcon /> Start Quiz
-            </Button>
-            }
-            { quizActive &&
-            <Button onClick={stopQuiz}>
-              <StopIcon /> Stop Quiz
-            </Button>
-            }
-          </CardActions>
-        </Card>
-      </Item>
-      <Dialog PaperProps={{ sx: { width: '45%', height: '35%' } }}
-      open={openNotif} onClose={notifClose}>
-      <DialogTitle>Session {props.quiz.id} is now Active!</DialogTitle>
-      <DialogContent>
-        <div>
-          <Button
-            variant= "contained"
-            component= "label"
-            onClick={ () => { navigator.clipboard.writeText(`${window.location.hostname}/play/join/${props.quiz.id}`) }}
-          >
-            Copy Link!
-          </Button>
-        </div>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={notifClose}>Close</Button>
-      </DialogActions>
-    </Dialog>
-    </Grid>
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={notifClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
 

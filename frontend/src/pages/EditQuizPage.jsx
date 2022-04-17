@@ -75,7 +75,7 @@ export default function EditQuizPage () {
       if (data.error) {
         throw new Error(data.error);
       }
-      addQuestion(q.questions);
+      getQuiz();
     } catch (err) {
       console.log(err);
     }
@@ -163,7 +163,7 @@ export default function EditQuizPage () {
             open={openAdd}
             onClose={dialogClose}
             allQuestions={quizInfo.questions}
-            addQuestion={addQuestion}
+            modifyQuiz={addQuestion}
             quizId={quizId}
             />
         </Box>

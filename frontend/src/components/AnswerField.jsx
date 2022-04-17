@@ -74,7 +74,6 @@ export default function answerField (props) {
 }
 
 answerField.propTypes = {
-  key: PropTypes.number,
   isDelete: PropTypes.bool,
   isCorrect: PropTypes.bool,
   updateAnswers: PropTypes.func,

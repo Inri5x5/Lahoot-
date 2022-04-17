@@ -23,7 +23,7 @@ export default function EditQuestionForm (props) {
   const [pointsWorth, setPointWorth] = React.useState(props.selectedQuestion.points);
   const [questionType, setQuestType] = React.useState(props.selectedQuestion.questionType);
   const [mediaType, setMediaType] = React.useState(props.selectedQuestion.mediaType);
-  const [questionThumbnail, setQuestionThumbnail] = React.useState('');
+  const [questionThumbnail, setQuestionThumbnail] = React.useState((mediaType === 'image') ? props.selectedQuestion.questionAttachment : '');
   const [questionVideo, setQuestionVideo] = React.useState((mediaType === 'video') ? props.selectedQuestion.questionAttachment : '');
   const [answers, setAnswers] = React.useState(props.selectedQuestion.answers);
 

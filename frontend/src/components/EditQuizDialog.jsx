@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, } from '@mui/material';
 import { fileToDataUrl } from '../helper-func.js';
+import PropTypes from 'prop-types';
 
 export default function editQuizDialog (props) {
   const [updateName, setNewName] = React.useState('');
@@ -46,8 +47,16 @@ export default function editQuizDialog (props) {
       </DialogContent>
       <DialogActions>
         <Button onClick={props.onClose}>Cancel</Button>
-        <Button onClick={() => props.quizInfoUpdate(updateName, quizThumbnail)}>Save</Button>
+        <Button onClick={() => {
+          props.quizInfoUpdate(updateName, quizThumbnail);
+        }}>Save</Button>
       </DialogActions>
     </Dialog>
   )
+}
+
+editQuizDialog.propTypes = {
+  openEdit: PropTypes.bool,
+  onClose: PropTypes.func,
+  quizInfoUpdate: PropTypes.func,
 }

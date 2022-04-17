@@ -36,8 +36,8 @@ export default function QuestionCard (props) {
         <Card>
           <CardMedia
             component="img"
-            height="50"
-            image={props.question.questionThumbnail}
+            height="100"
+            image={props.question.questionAttachment}
             alt={'question' + props.question.id + ' thumbnail'}
           />
           <CardContent>
