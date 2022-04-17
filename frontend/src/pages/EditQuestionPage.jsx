@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import DashboardNavBar from '../components/DashboardNav';
 import { APICall } from '../helper-func.js';
-import EditQuestionDialog from '../components/ModifyQuestionDialog';
+import EditQuestionForm from '../components/EditQuestionForm.jsx';
 import Loading from '../components/Loading';
 
 export default function EditQuestionPage () {
@@ -13,8 +13,15 @@ export default function EditQuestionPage () {
   const [loading, setLoading] = React.useState(false);
   const [questions, setQuestions] = React.useState([]);
   const [modifiedQuestion, setModifiedQuestion] = React.useState({});
+  // const [setModifiedQuestion] = React.useState({});
   const [quizName, setQuizName] = React.useState('');
   const [quizThumbnail, setQuizThumbnail] = React.useState('');
+
+  React.useEffect(() => {
+    if (!token) {
+      navigate('/')
+    }
+  }, []);
 
   const getQuestion = async () => {
     try {
@@ -29,7 +36,6 @@ export default function EditQuestionPage () {
       }
       let found = false;
       let i = 0;
-      console.log(data.questions)
       for (; i < data.questions.length; i++) {
         if (data.questions[i].id === questionId) {
           found = true;
@@ -41,9 +47,10 @@ export default function EditQuestionPage () {
       }
       setQuizName(data.name)
       setQuizThumbnail(data.thumbnail)
-      setQuestions(data.questions)
+      const newQuestions = [...data.questions]
+      setQuestions(newQuestions)
       setModifiedQuestion(data.questions[i])
-      setLoading(false);
+      if (modifiedQuestion !== undefined) setLoading(false);
     } catch (err) {
       alert(err);
       console.log(err);
@@ -53,14 +60,20 @@ export default function EditQuestionPage () {
   }
 
   React.useEffect(() => {
-    if (!token) {
-      navigate('/')
-    }
     getQuestion();
   }, []);
 
-  const updateQuestion = async (body) => {
+  const updateQuestion = async (newQuestion) => {
     try {
+      let updatedQuestions = [...questions]
+      updatedQuestions = updatedQuestions.filter((question) => question.id !== newQuestion.id)
+      updatedQuestions.push(newQuestion)
+      setQuestions(updatedQuestions)
+      const body = {
+        questions: questions,
+        name: quizName,
+        thumbnail: quizThumbnail,
+      }
       const headers = {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
@@ -75,27 +88,19 @@ export default function EditQuestionPage () {
     }
   }
 
-  const addQuestion = (newQuestion) => {
-    const updateQuizInfo = {
-      questions: questions,
-      name: quizName,
-      thumbnail: quizThumbnail,
-    }
-    updateQuizInfo.questions.push(newQuestion);
-    updateQuestion(updateQuizInfo);
-  }
-
   return (
     <Box sx={{ display: 'flex' }}>
       <DashboardNavBar></DashboardNavBar>
-      {loading && <Loading></Loading>}
-      {!loading &&
-        <EditQuestionDialog
-          open={true}
-          addingQuestion={addQuestion}
-          modifiedQuestion={modifiedQuestion}
-          />
-      }
+      <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 10 }}>
+        {loading && <Loading></Loading>}
+        {!loading &&
+          <EditQuestionForm
+            updateQuestion={updateQuestion}
+            allQuestions={questions}
+            modifiedQuestion={modifiedQuestion}
+            />
+        }
+      </Box>
     </Box>
   );
 }

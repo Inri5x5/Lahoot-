@@ -6,7 +6,7 @@ import QuestionCard from '../components/QuestionCard';
 import { APICall } from '../helper-func.js';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
-import AddQuestionDialog from '../components/ModifyQuestionDialog';
+import AddQuestionDialog from '../components/AddQuestionDialog';
 import EditQuizDialog from '../components/EditQuizDialog';
 import Loading from '../components/Loading';
 
@@ -137,51 +137,53 @@ export default function EditQuizCard () {
   return (
     <Box sx={{ display: 'flex' }}>
       <DashboardNavBar></DashboardNavBar>
-      {loading && <Loading></Loading>}
-      {!loading &&
-        <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 10 }}>
-          <Card>
-            <CardMedia
-              component="img"
-              image={quizInfo.thumbnail}
-              alt={quizInfo.name + ' thumbnail'}
-              height="150"
-              maxwidth="150"
-            />
-          </Card>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 10 }}>
+        {loading && <Loading></Loading>}
+        {!loading &&
+          <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 10 }}>
+            <Card>
+              <CardMedia
+                component="img"
+                image={quizInfo.thumbnail}
+                alt={quizInfo.name + ' thumbnail'}
+                height="150"
+                maxwidth="150"
+              />
+            </Card>
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <h1>{quizInfo.name}</h1>
-            <Button onClick={editDialogOpen}>
-              <ModeEditOutlineIcon />Edit Quiz
-            </Button>
-          </Box>
-
-          <Box>
-            {constructQuestion()}
-            <Box sx={{ display: 'flex', justifyContent: 'center', height: '15%' }}>
-              <IconButton
-                component="span"
-                color="primary"
-                aria-label="add question"
-                onClick={addDialogOpen}
-                >
-                <AddBoxOutlinedIcon sx={{ mx: 1, fontSize: '125%' }}/>
-              </IconButton>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <h1>{quizInfo.name}</h1>
+              <Button onClick={editDialogOpen}>
+                <ModeEditOutlineIcon />Edit Quiz
+              </Button>
             </Box>
+
+            <Box>
+              {constructQuestion()}
+              <Box sx={{ display: 'flex', justifyContent: 'center', height: '15%' }}>
+                <IconButton
+                  component="span"
+                  color="primary"
+                  aria-label="add question"
+                  onClick={addDialogOpen}
+                  >
+                  <AddBoxOutlinedIcon sx={{ mx: 1, fontSize: '125%' }}/>
+                </IconButton>
+              </Box>
+            </Box>
+            <EditQuizDialog
+              openEdit={openEdit}
+              onClose={dialogClose}
+              quizInfoUpdate={quizInfoUpdate}
+              />
+            <AddQuestionDialog
+              open={openAdd}
+              onClose={dialogClose}
+              addingQuestion={addQuestion}
+              />
           </Box>
-          <EditQuizDialog
-            openEdit={openEdit}
-            onClose={dialogClose}
-            quizInfoUpdate={quizInfoUpdate}
-            />
-          <AddQuestionDialog
-            open={openAdd}
-            onClose={dialogClose}
-            addingQuestion={addQuestion}
-            />
-        </Box>
-      }
+        }
+      </Box>
     </Box>
   );
 }
