@@ -19,31 +19,35 @@ import AnswerField from './AnswerField.jsx';
 import PropTypes from 'prop-types';
 
 export default function EditQuestionForm (props) {
-  const [questionName, setQuestionName] = React.useState('');
-  const [timeLimit, setTimeLimit] = React.useState(0);
-  const [pointsWorth, setPointWorth] = React.useState(0);
-  const [questionType, setQuestType] = React.useState('singleChoice');
-  const [openQType, setQType] = React.useState(false);
-  const [selectMediaType, setSelectMediaType] = React.useState({
-    image: false,
-    video: false,
-  });
-  const [mediaType, setMediaType] = React.useState('');
-  const [questionThumbnail, setQuestionThumbnail] = React.useState('');
-  const [questionVideo, setQuestionVideo] = React.useState('');
-  const [answers, setAnswers] = React.useState([]);
-  const { image, video } = selectMediaType;
+  if (props === undefined) return;
+  console.log(props)
 
+  const [questionName, setQuestionName] = React.useState(props.modifiedQuestion.question);
+  const [timeLimit, setTimeLimit] = React.useState(props.modifiedQuestion.timeLimit);
+  const [pointsWorth, setPointWorth] = React.useState(props.modifiedQuestion.points);
+  const [questionType, setQuestType] = React.useState(props.modifiedQuestion.questionType);
+  const [mediaType, setMediaType] = React.useState(props.modifiedQuestion.mediaType);
+  const [questionThumbnail, setQuestionThumbnail] = React.useState('');
+  const [questionVideo, setQuestionVideo] = React.useState((mediaType === 'video') ? props.modifiedQuestion.questionAttachment : '');
+  const [answers, setAnswers] = React.useState(props.modifiedQuestion.answers);
+
+  const [openQType, setQType] = React.useState(false);
+  const imageStat = (mediaType === 'image');
+  const videoStat = (mediaType === 'video');
+  const [selectMediaType, setSelectMediaType] = React.useState({
+    image: imageStat,
+    video: videoStat,
+  });
   // React.useEffect(() => {
-  //   console.log('yyyy')
-  //   const initialAnswers = []
-  //   for (let i = 0; i < props.modifiedQuestion.answers.length; i++) {
-  //     initialAnswers.push({
-  //       id: props.modifiedQuestion.answers[i].id,
-  //       answer: props.modifiedQuestion.answers[i].answer,
-  //       correct: props.modifiedQuestion.answers[i].correct,
-  //     });
-  //   }
+  //     console.log('yyyy')
+  //     const initialAnswers = []
+  //     for (let i = 0; i < props.modifiedQuestion.answers.length; i++) {
+  //         initialAnswers.push({
+  //             id: props.modifiedQuestion.answers[i].id,
+  //             answer: props.modifiedQuestion.answers[i].answer,
+  //             correct: props.modifiedQuestion.answers[i].correct,
+  //           });
+  //         }
   //   setAnswers(initialAnswers);
   //   setQuestionVideo(props.modifiedQuestion.questionVideo);
   //   setQuestionThumbnail(props.modifiedQuestion.questionThumbnail);
@@ -122,6 +126,7 @@ export default function EditQuestionForm (props) {
 
   const checkCorrectAnswer = () => {
     let numCorrect = 0;
+    if (answers === undefined) return
     for (let i = 0; i < answers.length; i++) {
       if (answers[i].correct === true) numCorrect++;
     }
@@ -140,6 +145,7 @@ export default function EditQuestionForm (props) {
   }
 
   const constructAnswers = () => {
+    if (answers === undefined) return;
     const answerFields = answers.map((answer, index) => {
       answer.id = index;
       let possibleDelete = false;
@@ -237,13 +243,13 @@ export default function EditQuestionForm (props) {
           <FormGroup>
             <FormControlLabel
               control={
-                <Checkbox checked={image} onChange={handleImageCheckbox} name="image" />
+                <Checkbox checked={selectMediaType.image} onChange={handleImageCheckbox} name="image" />
               }
               label="Image"
             />
             <FormControlLabel
               control={
-                <Checkbox checked={video} onChange={handleVideoCheckbox} name="video" />
+                <Checkbox checked={selectMediaType.video} onChange={handleVideoCheckbox} name="video" />
               }
               label="Video Url"
             />
@@ -259,6 +265,7 @@ export default function EditQuestionForm (props) {
 
       {(mediaType === 'video') && (
         <TextField
+        defaultValue={ (mediaType === 'video') ? questionVideo : '' }
         margin="dense"
         id="videoUrl"
         label="Video URL"
@@ -284,7 +291,7 @@ export default function EditQuestionForm (props) {
           <FormLabel component="legend"> {(questionType === 'singleChoice') ? 'Please check 1 of the answers ' : 'Please check 2 or more of the answers '} as the correct answer(s)</FormLabel>
           {constructAnswers()}
         </FormControl>
-        {(answers.length < 6) &&
+        {(answers !== undefined && answers.length < 6) &&
           (<Button onClick={() => {
             const newAnswers = [...answers];
             newAnswers.push({

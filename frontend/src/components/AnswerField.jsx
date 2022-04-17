@@ -35,21 +35,30 @@ export default function answerField (props) {
     props.updateAnswers(updatedAnswers);
   }
 
-  const deleteAns = () => {
+  const deleteAns = (e) => {
     let updatedAnswers = [...props.allAnswers];
+    for (let i = 0; i < updatedAnswers.length; i++) {
+      if (i === props.id && i++ < updatedAnswers.length) {
+        console.log(i)
+        console.log(updatedAnswers[i].answer)
+        setText(updatedAnswers[i].answer);
+        break;
+      }
+    }
     updatedAnswers = updatedAnswers.filter((answer) => answer.id !== props.id)
-    props.updateAnswers([]);
-    setTimeout(() => { props.updateAnswers(updatedAnswers) }, 500);
+    console.log(updatedAnswers)
+    props.updateAnswers(updatedAnswers);
   }
 
   return (
-    <div>
+    <div key={props.id}>
       <Checkbox sx= {{ mt: 3 }}
         checked={props.isCorrect}
         onChange={checkedUpdate}
       />
       <TextField
-        defaultValue={text}
+        // defaultValue={text}
+        value={text}
         margin="dense"
         id="answers"
         label="Answer"

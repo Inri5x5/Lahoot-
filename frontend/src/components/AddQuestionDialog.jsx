@@ -39,7 +39,6 @@ export default function AddQuestionDialog (props) {
   const { image, video } = selectMediaType;
 
   React.useEffect(() => {
-    console.log('yuyuyu')
     const initialAnswers = []
     for (let i = 0; i < 2; i++) {
       initialAnswers.push({
@@ -100,8 +99,8 @@ export default function AddQuestionDialog (props) {
       timeLimit: timeLimit,
       points: pointsWorth,
       questionType: questionType,
-      questionThumbnail: questionThumbnail,
-      questionVideo: questionVideo,
+      mediaType: (mediaType === 'image') ? 'image' : 'video',
+      questionAttachment: (mediaType === 'image') ? questionThumbnail : questionVideo,
       answers: answers,
     }
     if (checkValidDialog(newQuestion)) props.addingQuestion(newQuestion);
@@ -235,13 +234,13 @@ export default function AddQuestionDialog (props) {
             <FormGroup>
               <FormControlLabel
                 control={
-                  <Checkbox checked={image} onChange={handleImageCheckbox} name="image" />
+                  <Checkbox checked={image} onChange={handleImageCheckbox} disabled={questionVideo !== ''} name="image" />
                 }
                 label="Image"
               />
               <FormControlLabel
                 control={
-                  <Checkbox checked={video} onChange={handleVideoCheckbox} name="video" />
+                  <Checkbox checked={video} onChange={handleVideoCheckbox} disabled={questionThumbnail !== ''} name="video"/>
                 }
                 label="Video Url"
               />
@@ -254,7 +253,6 @@ export default function AddQuestionDialog (props) {
             <input type="file" id="questionImage" name="questionImage" accept=".png,.jpeg,.jpg" onChange={updateQuestionThumbnail} />
           </div>
         )}
-
         {(mediaType === 'video') && (
           <TextField
           margin="dense"
@@ -264,6 +262,7 @@ export default function AddQuestionDialog (props) {
           placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"
           fullWidth
           variant="standard"
+          value={questionVideo}
           onChange={(e) => setQuestionVideo(e.target.value) }
         />
         )}
@@ -311,4 +310,5 @@ AddQuestionDialog.propTypes = {
   onClose: PropTypes.func,
   addingQuestion: PropTypes.func,
   modifiedQuestion: PropTypes.object,
+  getQuiz: PropTypes.object,
 }

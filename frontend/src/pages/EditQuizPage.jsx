@@ -140,7 +140,7 @@ export default function EditQuizCard () {
       <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 10 }}>
         {loading && <Loading></Loading>}
         {!loading &&
-          <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 10 }}>
+          <Box>
             <Card>
               <CardMedia
                 component="img"

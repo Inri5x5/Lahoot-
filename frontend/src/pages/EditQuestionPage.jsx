@@ -49,8 +49,8 @@ export default function EditQuestionPage () {
       setQuizThumbnail(data.thumbnail)
       const newQuestions = [...data.questions]
       setQuestions(newQuestions)
-      setModifiedQuestion(data.questions[i])
-      if (modifiedQuestion !== undefined) setLoading(false);
+      setModifiedQuestion(data.questions[i]);
+      setLoading(false);
     } catch (err) {
       alert(err);
       console.log(err);
