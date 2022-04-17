@@ -22,7 +22,7 @@ import { fileToDataUrl } from '../helper-func.js';
 import AnswerField from './AnswerField.jsx';
 import PropTypes from 'prop-types';
 
-export default function ModifyQuestionDialog (props) {
+export default function AddQuestionDialog (props) {
   const [questionName, setQuestionName] = React.useState('');
   const [timeLimit, setTimeLimit] = React.useState(0);
   const [pointsWorth, setPointWorth] = React.useState(0);
@@ -37,59 +37,29 @@ export default function ModifyQuestionDialog (props) {
   const [questionVideo, setQuestionVideo] = React.useState('');
   const [answers, setAnswers] = React.useState([]);
   const { image, video } = selectMediaType;
-  // const [isEdit, setIsEdit] = React.useState(false);
 
   React.useEffect(() => {
-    // if ('modifiedQuestion' in props) setIsEdit(true);
-
-    if ('modifiedQuestion' in props) {
-      console.log('This is Edit!')
-      const questionInfo = props.modifiedQuestion;
-      console.log(questionInfo);
-      const initialAnswers = questionInfo.answers;
-      for (let i = 0; i < 2; i++) {
-        initialAnswers.push({
-          id: i,
-          answer: 'Sample Answer',
-          correct: false,
-        });
-      }
-      setAnswers(initialAnswers);
-      setQuestionVideo('');
-      setQuestionThumbnail('');
-      setMediaType('');
-      setSelectMediaType({
-        image: false,
-        video: false,
+    const initialAnswers = []
+    for (let i = 0; i < 2; i++) {
+      initialAnswers.push({
+        id: i,
+        answer: 'Sample Answer',
+        correct: false,
       });
-      setQType(false);
-      setQuestType('singleChoice');
-      setPointWorth(questionInfo.points);
-      setTimeLimit(questionInfo.timeLimit);
-      setQuestionName(questionInfo.question);
-    } else {
-      const initialAnswers = []
-      for (let i = 0; i < 2; i++) {
-        initialAnswers.push({
-          id: i,
-          answer: 'Sample Answer',
-          correct: false,
-        });
-      }
-      setAnswers(initialAnswers);
-      setQuestionVideo('');
-      setQuestionThumbnail('');
-      setMediaType('');
-      setSelectMediaType({
-        image: false,
-        video: false,
-      });
-      setQType(false);
-      setQuestType('singleChoice');
-      setPointWorth(0);
-      setTimeLimit(0);
-      setQuestionName('');
     }
+    setAnswers(initialAnswers);
+    setQuestionVideo('');
+    setQuestionThumbnail('');
+    setMediaType('');
+    setSelectMediaType({
+      image: false,
+      video: false,
+    });
+    setQType(false);
+    setQuestType('singleChoice');
+    setPointWorth(0);
+    setTimeLimit(0);
+    setQuestionName('');
   }, [props.open])
 
   const handleImageCheckbox = (event) => {
@@ -192,11 +162,12 @@ export default function ModifyQuestionDialog (props) {
   return (
     <Dialog PaperProps={{ sx: { width: '60%', height: '60%' } }}
       open={props.open} onClose={props.onClose}>
-      <DialogTitle> {('modifiedQuestion' in props) ? 'Edit Question' : 'Add Question'} </DialogTitle>
+      <DialogTitle> Add Question </DialogTitle>
 
       <DialogContent>
         <TextField
           required
+          defaultValue={questionName}
           error={questionName === ''}
           helperText="Please enter your question"
           margin="dense"
@@ -209,7 +180,7 @@ export default function ModifyQuestionDialog (props) {
         />
         <TextField
           required
-          defaultValue={0}
+          defaultValue={timeLimit}
           error={timeLimit === 0}
           helperText="Time limit should be greater than zero"
           margin="dense"
@@ -226,7 +197,7 @@ export default function ModifyQuestionDialog (props) {
           }}
         />
         <TextField
-          defaultValue={0}
+          defaultValue={pointsWorth}
           margin="dense"
           id="pointsWorth"
           label="Points Worth"
@@ -324,7 +295,6 @@ export default function ModifyQuestionDialog (props) {
             </Button>)
           }
         </Box>
-
       </DialogContent>
 
       <DialogActions>
@@ -335,7 +305,7 @@ export default function ModifyQuestionDialog (props) {
   )
 }
 
-ModifyQuestionDialog.propTypes = {
+AddQuestionDialog.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   addingQuestion: PropTypes.func,
