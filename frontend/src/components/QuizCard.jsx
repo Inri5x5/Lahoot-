@@ -20,8 +20,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { APICall } from '../helper-func.js';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import StopIcon from '@mui/icons-material/StopRounded';
 import StartIcon from '@mui/icons-material/PlayArrowRounded';
+import StopIcon from '@mui/icons-material/StopRounded';
 import defaultQuiz from '../assets/defaultQuiz.jpg'
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -33,38 +33,44 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function QuizCard (props) {
   const navigate = useNavigate();
-  const [quizActive, setQuizActive] = React.useState(false);
-  const [openNotif, setOpenNotif] = React.useState(false);
+  const [startQuiz, setStartDialog] = React.useState(false);
+  const [endQuiz, setEndDialog] = React.useState(false);
 
-  const startQuiz = () => {
-    setQuizActive(true);
-    updateQuiz();
-    notifOpen();
+  const handleStartQuiz = () => {
+    updateQuiz('start');
+    openStartQuiz();
   }
 
-  const stopQuiz = () => {
-    setQuizActive(false);
-    updateQuiz();
+  const openStartQuiz = () => {
+    setStartDialog(true);
   }
 
-  const notifOpen = () => {
-    setOpenNotif(true);
+  const dialogClose = (e, r) => {
+    setStartDialog(false);
+    setEndDialog(false);
+    updateQuiz('end');
+    // navigate(`/session/${props.quiz.id}/results`)
   }
 
-  const notifClose = () => {
-    setOpenNotif(false);
+  const resultPage = () => {
+    setStartDialog(false);
+    setEndDialog(false);
+    updateQuiz('end');
+    navigate(`/session/${props.quiz.id}/results`)
   }
 
-  const updateQuiz = async () => {
-    const updatedQuiz = props.quiz;
-    updatedQuiz.active = quizActive;
-    console.log(updatedQuiz);
+  const openEndQuiz = () => {
+    setEndDialog(true);
+  }
+
+  const updateQuiz = async (status) => {
+    console.log(`/admin/quiz/${props.quiz.id}/${status}`)
     try {
       const headers = {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
       };
-      const data = await APICall(updatedQuiz, `/admin/quiz/${props.quiz.id}`, 'PUT', headers);
+      const data = await APICall(props.quiz, `/admin/quiz/${props.quiz.id}/${status}`, 'POST', headers);
       if (data.error) {
         throw new Error(data.error);
       }
@@ -118,23 +124,16 @@ export default function QuizCard (props) {
               <Button onClick={() => deleteQuiz(props.quiz.id)}>
                 <DeleteIcon />
               </Button>
-              { !quizActive &&
-              <Button onClick={startQuiz}>
+              <Button onClick={handleStartQuiz}>
                 <StartIcon /> Start Quiz
               </Button>
-              }
-              { quizActive &&
-              <Button onClick={stopQuiz}>
-                <StopIcon /> Stop Quiz
-              </Button>
-              }
             </CardActions>
           </Card>
         </Item>
       </Grid>
 
       <Dialog PaperProps={{ sx: { width: '45%' } }}
-        open={openNotif} onClose={notifClose}>
+        open={startQuiz}>
         <DialogTitle>Session {props.quiz.id} is now Active!</DialogTitle>
         <DialogContent>
           <div>
@@ -148,8 +147,25 @@ export default function QuizCard (props) {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={notifClose}>Close</Button>
+          <Button onClick={() => updateQuiz('advance')}> Next Question </Button>
+          <Button onClick={openEndQuiz}> <StopIcon/> Stop Quiz </Button>
         </DialogActions>
+      </Dialog>
+
+      <Dialog PaperProps={{ sx: { width: '45%' } }}
+        open={endQuiz}>
+        <DialogTitle>Session is now Ended!</DialogTitle>
+        <DialogContent>
+          Would you like to view the results?
+          <div>
+            <Button onClick={resultPage}>
+              Yes
+            </Button>
+            <Button onClick={dialogClose}>
+              No
+            </Button>
+          </div>
+        </DialogContent>
       </Dialog>
     </>
   );
