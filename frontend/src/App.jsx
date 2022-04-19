@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import EditQuiz from './pages/EditQuizPage';
 import EditQuestion from './pages/EditQuestionPage';
 import SessionResult from './pages/SessionResult';
+import JoinGame from './pages/JoinGamePage';
 
 function App () {
   return (
@@ -22,6 +23,8 @@ function App () {
           <Route path="/edit/quiz/:quizId" element={<EditQuiz />} />
           <Route path="/edit/quiz/:quizId/:questionId" element={<EditQuestion />} />
           <Route path="/session/:sessionId/results" element={<SessionResult />} />
+          <Route path="/play/join/:sessionId" element={<JoinGame />} />
+          <Route path="/play/join/" element={<JoinGame />} />
         </Routes>
       </BrowserRouter>
     </>

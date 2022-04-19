@@ -33,8 +33,9 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function QuizCard (props) {
   const navigate = useNavigate();
-  const [startQuiz, setStartDialog] = React.useState(false);
+  const [startQuiz, setStartDialog] = React.useState(props.quiz.active !== null);
   const [endQuiz, setEndDialog] = React.useState(false);
+  const [sessionId, setSessionId] = React.useState('');
 
   const handleStartQuiz = () => {
     updateQuiz('start');
@@ -56,7 +57,7 @@ export default function QuizCard (props) {
     setStartDialog(false);
     setEndDialog(false);
     updateQuiz('end');
-    navigate(`/session/${props.quiz.id}/results`)
+    navigate(`/session/${sessionId}/results`)
   }
 
   const openEndQuiz = () => {
@@ -71,6 +72,10 @@ export default function QuizCard (props) {
         Authorization: `Bearer ${localStorage.getItem('token').toString()}`,
       };
       const data = await APICall(props.quiz, `/admin/quiz/${props.quiz.id}/${status}`, 'POST', headers);
+      if (status === 'start') {
+        const quizData = await APICall(null, `/admin/quiz/${props.quiz.id}`, 'GET', headers);
+        setSessionId(quizData.active);
+      }
       if (data.error) {
         throw new Error(data.error);
       }
@@ -134,13 +139,13 @@ export default function QuizCard (props) {
 
       <Dialog PaperProps={{ sx: { width: '45%' } }}
         open={startQuiz}>
-        <DialogTitle>Session {props.quiz.id} is now Active!</DialogTitle>
+        <DialogTitle>Session {sessionId} is now Active!</DialogTitle>
         <DialogContent>
           <div>
             <Button
               variant= "contained"
               component= "label"
-              onClick={ () => { navigator.clipboard.writeText(`${window.location.hostname}/${window.location.port}/play/join/${props.quiz.id}`) }}
+              onClick={ () => { navigator.clipboard.writeText(`${window.location.hostname}:${window.location.port}/play/join/${sessionId}`) }}
             >
               Copy Link!
             </Button>
