@@ -36,7 +36,11 @@ export default function EditQuizPage () {
   };
 
   const addQuestion = (updatedQuestions) => {
-    setQuizInfo({ questions: updatedQuestions })
+    setQuizInfo({
+      questions: updatedQuestions,
+      name: quizInfo.name,
+      thumbnail: quizInfo.thumbnail,
+    })
   }
 
   const quizInfoUpdate = (updateName, quizThumbnail) => {
