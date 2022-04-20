@@ -6,17 +6,19 @@
 export const quizQuestionPublicReturn = question => {
   console.log('See question: ', question);
   const removedCorrectAnswers = question.answers.map(ans => {
-    delete ans['correct']
-    return ans
+    //delete ans['correct'];
+    ans['selected'] = false;
+    return ans;
   });
+
   return {
-    questionId: question.idd,
-    type: question.questionType,
-    text: question.question,
+    questionId: question.id,
+    questionType: question.questionType,
+    question: question.question,
     timeLimit: question.timeLimit,
     points: question.points,
     mediaType: question.mediaType,
-    attachment: question.questionAttachment,
+    questionAttachment: question.questionAttachment,
     answers: removedCorrectAnswers, 
   };
 };
@@ -26,6 +28,7 @@ export const quizQuestionPublicReturn = question => {
  the correct answers (minimum 1).
 */
 export const quizQuestionGetCorrectAnswers = question => {
+  console.log('disini', question)
   const correctAnswers = question.answers.filter(answer => answer.correct === true);
   const correctAnswerIds = correctAnswers.map(correctAnswer => correctAnswer.id);
   return correctAnswerIds;
@@ -36,6 +39,7 @@ export const quizQuestionGetCorrectAnswers = question => {
  all of the answers, correct or incorrect.
 */
 export const quizQuestionGetAnswers = question => {
+  console.log('tesssssssssssssssssssssssssssssssssss')
   return question.answers.map(answer => answer.id);
 };
 

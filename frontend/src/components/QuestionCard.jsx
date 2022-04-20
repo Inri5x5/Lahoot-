@@ -57,9 +57,6 @@ export default function QuestionCard (props) {
               QuestionType: {(props.question.questionType === 'singleChoice') ? 'Single Choice' : 'Multiple Choice'}
             </Typography>
             <Divider />
-            <Typography variant="body2" color="text.secondary">
-              Correct Answer:
-            </Typography>
           </CardContent>
           <CardActions>
             <Button onClick={props.updateQuestion}>

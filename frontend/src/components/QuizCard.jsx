@@ -36,6 +36,7 @@ export default function QuizCard (props) {
   const [startQuiz, setStartDialog] = React.useState(props.quiz.active !== null);
   const [endQuiz, setEndDialog] = React.useState(false);
   const [sessionId, setSessionId] = React.useState('');
+  const [buttonText, setButtonText] = React.useState('Start Quiz');
 
   const handleStartQuiz = () => {
     updateQuiz('start');
@@ -151,7 +152,7 @@ export default function QuizCard (props) {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => updateQuiz('advance')}> Next Question </Button>
+          <Button onClick={() => { updateQuiz('advance'); setButtonText('Next Question') }}> {buttonText} </Button>
           <Button id="endButton" onClick={openEndQuiz}> <StopIcon/> Stop Quiz </Button>
         </DialogActions>
       </Dialog>

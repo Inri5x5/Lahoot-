@@ -10,6 +10,7 @@ import EditQuiz from './pages/EditQuizPage';
 import EditQuestion from './pages/EditQuestionPage';
 import SessionResult from './pages/SessionResult';
 import JoinGame from './pages/JoinGamePage';
+import PlayerGame from './pages/PlayerGamePage';
 
 function App () {
   return (
@@ -25,6 +26,7 @@ function App () {
           <Route path="/session/:sessionId/results" element={<SessionResult />} />
           <Route path="/play/join/:sessionId" element={<JoinGame />} />
           <Route path="/play/join/" element={<JoinGame />} />
+          <Route path="/play/:playerId" element={<PlayerGame />} />
         </Routes>
       </BrowserRouter>
     </>

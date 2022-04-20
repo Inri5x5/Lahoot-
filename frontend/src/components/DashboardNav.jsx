@@ -187,7 +187,7 @@ export default function DashboardNav (props) {
         <List>
           {['Add Game', 'Join Game'].map((text, index) => (
             <ListItemButton
-              onClick={index % 2 === 0 ? handleDialogOpen : null}
+              onClick={index % 2 === 0 ? handleDialogOpen : () => { navigate('/play/join/') }}
               key={text}
               sx={{
                 minHeight: 48,
