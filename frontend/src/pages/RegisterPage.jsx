@@ -2,28 +2,41 @@ import RegisterForm from '../components/RegisterForm';
 import AuthNavBar from '../components/AuthNavBar'
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
+import { APICall } from '../helper-func';
+import Loading from '../components/Loading'
 
 function Register () {
   const navigate = useNavigate();
+  const [loading, setLoading] = React.useState(false);
+
+  const register = async (email, password, name) => {
+    try {
+      setLoading(true);
+      const requestBody = {
+        email: email,
+        password: password,
+        name: name,
+      };
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      const data = await APICall(requestBody, '/admin/auth/register', 'POST', headers);
+      localStorage.setItem('token', data.token);
+      setLoading(false);
+      navigate('/dashboard');
+    } catch (err) {
+      alert(err);
+      setLoading(false);
+    }
+  }
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return <>
     <AuthNavBar></AuthNavBar>
-    <RegisterForm submit={async (email, password, name) => {
-      const response = await fetch('http://localhost:5005/admin/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          name,
-        })
-      });
-      const data = await response.json();
-      localStorage.setItem('token', data.token);
-      navigate('/quiz/new');
-    }} />
+    <RegisterForm submit={register} />
   </>;
 }
 

@@ -3,21 +3,28 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/core": "^7.17.9",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.6.0",
     "@mui/material": "^5.6.0",
     "bootstrap": "^5.1.3",
+    "chart.js": "^3.7.1",
+    "chartjs": "^0.3.24",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
     "react": "^17.0.1",
     "react-bootstrap": "^2.2.3",
+    "react-chartjs-2": "^4.1.0",
     "react-dom": "^17.0.1",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "4.0.0"
+    "react-scripts": "4.0.0",
+    "yarn": "^1.22.18"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --watchAll=false",
+    "test": "react-scripts test --watchAll=false --collectCoverage",
     "eject": "react-scripts eject",
     "lint": "eslint \"src/**/*.{js,jsx}\""
   },
@@ -43,6 +50,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "cypress": "^9.5.4",
     "eslint": "^7.12.1",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",

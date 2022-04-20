@@ -6,7 +6,7 @@ function LoginForm ({ submit }) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
-  const onSubmit = () => {
+  const toSubmit = () => {
     submit(email, password);
   }
 
@@ -16,10 +16,11 @@ function LoginForm ({ submit }) {
       <h3>Welcome Back Master</h3>
       <label>Email:</label>
       <input
-        type="text"
+        type="email"
         required
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        name="email"
       />
       <label>Password:</label>
       <input
@@ -27,8 +28,9 @@ function LoginForm ({ submit }) {
         required
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        name="password"
       />
-      <button onClick={onSubmit}>Login</button>
+      <button onClick={toSubmit}>Login</button>
     </div>
   </>)
 }

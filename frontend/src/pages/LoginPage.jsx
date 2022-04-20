@@ -1,58 +1,42 @@
 import LoginForm from '../components/LoginForm';
 import AuthNavBar from '../components/AuthNavBar'
-import ErrorModal from '../components/ErrorModal'
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
+import { APICall } from '../helper-func';
+import Loading from '../components/Loading'
 
 function Login () {
   const navigate = useNavigate();
-  const ref = React.useRef();
-
-  const [isError, setError] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState('');
-
-  React.useEffect(() => {
-    const checkIfClickedOutside = e => {
-      if (isError && ref.current && !ref.current.contains(e.target)) {
-        setError(false)
-      }
-    }
-    document.addEventListener('mousedown', checkIfClickedOutside)
-    return () => {
-      document.removeEventListener('mousedown', checkIfClickedOutside)
-    }
-  }, [isError])
+  const [loading, setLoading] = React.useState(false);
 
   const login = async (email, password) => {
+    let data = null;
     try {
-      const response = await fetch('http://localhost:5005/admin/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        })
-      });
-      const data = await response.json();
-      if (data.error) {
-        throw new Error(data.error);
-      }
+      setLoading(true);
+      const requestBody = {
+        email: email,
+        password: password,
+      };
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      data = await APICall(requestBody, '/admin/auth/login', 'POST', headers);
       localStorage.setItem('token', data.token);
-      navigate('/quiz/new');
+      setLoading(false);
+      navigate('/dashboard');
     } catch (err) {
-      setErrorMessage('Something is wrong');
-      setError(true);
+      alert(err);
+      setLoading(false);
     }
   }
 
+  if (loading) {
+    return <Loading />;
+  }
+
   return <>
-    <div ref={ref}>
-      <AuthNavBar></AuthNavBar>
-      <LoginForm submit={login}/>
-      { isError && <ErrorModal error={errorMessage}></ErrorModal> }
-    </div>
+    <AuthNavBar></AuthNavBar>
+    <LoginForm submit={login}/>
   </>;
 }
 

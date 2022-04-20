@@ -17,7 +17,7 @@ function RegisterForm ({ submit }) {
       <h3>Cant beat them, then join them</h3>
       <label>Email:</label>
       <input
-        type="text"
+        type="email"
         required
         value={email}
         onChange={(e) => setEmail(e.target.value)}
