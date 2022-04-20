@@ -6,7 +6,6 @@
 export const quizQuestionPublicReturn = question => {
   console.log('See question: ', question);
   const removedCorrectAnswers = question.answers.map(ans => {
-    //delete ans['correct'];
     ans['selected'] = false;
     return ans;
   });
@@ -28,7 +27,7 @@ export const quizQuestionPublicReturn = question => {
  the correct answers (minimum 1).
 */
 export const quizQuestionGetCorrectAnswers = question => {
-  console.log('disini', question)
+  console.log('See correct question: ', question);
   const correctAnswers = question.answers.filter(answer => answer.correct === true);
   const correctAnswerIds = correctAnswers.map(correctAnswer => correctAnswer.id);
   return correctAnswerIds;

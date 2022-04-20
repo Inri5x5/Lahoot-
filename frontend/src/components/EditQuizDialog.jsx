@@ -38,7 +38,7 @@ export default function editQuizDialog (props) {
           <Button
             variant= "contained"
             component= "label"
-            sx={{ mb: 1 }}
+            sx={{ mb: 1, mr: 1 }}
           >
             Upload Thumbnail
             <input
@@ -52,6 +52,7 @@ export default function editQuizDialog (props) {
             variant= "contained"
             component= "label"
             onClick={deleteQuizThumbnail}
+            sx={{ mb: 1 }}
           >
             Delete Thumbnail
           </Button>

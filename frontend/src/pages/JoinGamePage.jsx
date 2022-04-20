@@ -100,7 +100,7 @@ function JoinGame () {
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={open}
       >
-        <div style={{ display: 'flex', 'flex-direction': 'column', 'align-items': 'center' }}>
+        <div style={{ display: 'flex', flexdDrection: 'column', alignItems: 'center' }}>
           <CircularProgress color="inherit" />
           <Typography variant="button" display="block" gutterBottom >
             Waiting for Admin to Start the Quiz

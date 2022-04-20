@@ -290,7 +290,7 @@ export default function EditQuestionForm (props) {
             });
             setAnswers(newAnswers);
           }}>
-            Add
+            Add Answer
           </Button>)
         }
       </Box>
