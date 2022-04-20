@@ -127,7 +127,7 @@ function PlayerGame () {
   return <>
     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh', position: 'relative' }}>
       {(timeLimit > 0) && <Timer timeLimit={timeLimit} updateTimeLimit={setTimeLimit} showCorrectDialog={() => getCorrectAnswer()}></Timer>}
-      <PlayerQuestionCard questionName={questionName} points={pointWorth} mediaType={mediaType} attachment={attachment}></PlayerQuestionCard>
+      <PlayerQuestionCard questionName={questionName} points={pointWorth} mediaType={mediaType} attachment={attachment} questionType={questionType}></PlayerQuestionCard>
       {createAnswers()}
     </div>
     {(timeLimit === 0) && <CorrectAnswers correctAnswers={correctAnswers} allAnswers={answers} afterCorrect={() => getQuestion()}></CorrectAnswers>}

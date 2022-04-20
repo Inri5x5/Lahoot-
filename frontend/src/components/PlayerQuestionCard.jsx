@@ -16,12 +16,28 @@ export default function PlayerQuestionCard (props) {
           alt="question thumbnail"
         />
       }
+      { props.mediaType === 'video' &&
+        <div style={{ margin: '0 auto', textAlign: 'center' }}>
+          <iframe
+            maxHeight='50vh'
+            maxWeight= '50vw'
+            src={props.attachment}
+            frameBorder="0"
+            allowFullScreen
+            allow="autoPlay"
+            style={{ margin: '25px 10px' }}
+          ></iframe>
+        </div>
+      }
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {props.questionName}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Points: {props.points}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {(props.questionType === 'singleChoice' ? 'Pick one of the answers' : 'Pick 2 or more from the answers')}
         </Typography>
       </CardContent>
     </Card>
@@ -33,4 +49,5 @@ PlayerQuestionCard.propTypes = {
   points: PropTypes.number,
   mediaType: PropTypes.string,
   attachment: PropTypes.string,
+  questionType: PropTypes.string,
 }

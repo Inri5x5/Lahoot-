@@ -9,10 +9,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 const styleLogo = {
   margin: '0 20px',
-  minWidth: '350px',
-  minHeight: '200px',
-  width: '40%',
-  height: '20%',
+  maxWidth: '350px',
+  maxHeight: '200px',
 };
 
 function JoinGame () {
@@ -89,14 +87,10 @@ function JoinGame () {
       <h1 className="title">BigBrain</h1>
       <div className="descContainer">
         <h3 className="description">Ready for a Challenge ?</h3>
-        <div className="buttonContainer">
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <TextField size="small" id="outlined-basic" label="Session Id" variant="outlined" defaultValue={id} required onChange={ (e) => setId(e.target.value) }/>
-        </div>
-        <div className="buttonContainer">
           <TextField size="small" id="outlined-basic" label="Name" variant="outlined" required onChange={ (e) => setProfileName(e.target.value) }/>
-        </div>
           <Button variant="outlined" onClick={ () => { joinGame() }}>Join Game</Button>
-        <div>
         </div>
       </div>
       <Backdrop
