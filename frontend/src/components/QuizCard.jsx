@@ -58,7 +58,7 @@ export default function QuizCard (props) {
     setStartDialog(false);
     setEndDialog(false);
     updateQuiz('end');
-    navigate(`/session/${sessionId}/results`)
+    navigate(`/session/${sessionId}/${props.quiz.id}/results`)
   }
 
   const openEndQuiz = () => {

@@ -1,8 +1,6 @@
-import { Alert } from '@mui/material';
-import { render, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 import React from 'react';
 import LoginForm from '../components/LoginForm'
-import LoginPage from '../pages/LoginPage'
 
 describe('LoginForm Component', () => {
   const noop = () => {};
@@ -16,11 +14,11 @@ describe('LoginForm Component', () => {
     const login = shallow(<LoginForm />);
     const emailInput = (login.find('input')).findWhere((node) => node.props().name === 'email');
     const passInput = (login.find('input')).findWhere((node) => node.props().name === 'password')
-    
+
     /* Check if there is an input for email and password */
     expect(emailInput.exists()).toEqual(true);
     expect(passInput.exists()).toEqual(true);
-    
+
     /* Check if the input is empty at start */
     expect(emailInput.props().value).toEqual('');
     expect(passInput.props().value).toEqual('');
@@ -30,9 +28,9 @@ describe('LoginForm Component', () => {
     const login = shallow(<LoginForm />);
     let emailInput = (login.find('input')).findWhere((node) => node.props().name === 'email');
     let passInput = (login.find('input')).findWhere((node) => node.props().name === 'password');
-    emailInput.simulate('change', { target: { value: 'emailTest'} });
+    emailInput.simulate('change', { target: { value: 'emailTest' } });
     passInput.simulate('change', { target: { value: 'passTest' } });
-    
+
     /* The value change after simulate change */
     login.update();
     emailInput = (login.find('input')).findWhere((node) => node.props().name === 'email');
@@ -46,5 +44,4 @@ describe('LoginForm Component', () => {
     const btn = login.find('button')
     btn.simulate('click')
   })
-
 })
