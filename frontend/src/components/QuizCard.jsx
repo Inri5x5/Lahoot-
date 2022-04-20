@@ -62,6 +62,7 @@ export default function QuizCard (props) {
   }
 
   const openEndQuiz = () => {
+    setButtonText('Start Quiz')
     setEndDialog(true);
   }
 

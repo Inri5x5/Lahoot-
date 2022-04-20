@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import { APICall } from '../helper-func.js';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
 
 const styleLogo = {
   margin: '0 20px',
@@ -61,6 +62,7 @@ function JoinGame () {
       console.log(err);
       alert(err);
       clearInterval(interval);
+      handleClose();
     }
   }
 
@@ -78,6 +80,7 @@ function JoinGame () {
       }
       setPlayerId(data.playerId);
     } catch (err) {
+      alert(err);
       console.log(err);
     }
   }
@@ -96,9 +99,13 @@ function JoinGame () {
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={open}
-        onClick={handleClose}
       >
-        <CircularProgress color="inherit" />
+        <div style={{ display: 'flex', 'flex-direction': 'column', 'align-items': 'center' }}>
+          <CircularProgress color="inherit" />
+          <Typography variant="button" display="block" gutterBottom >
+            Waiting for Admin to Start the Quiz
+          </Typography>
+        </div>
       </Backdrop>
     </div>
   </>
