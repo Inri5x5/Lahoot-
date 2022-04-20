@@ -222,8 +222,8 @@ export default function EditQuestionForm (props) {
           label="Question Type"
           onChange={handleTypeChange}
         >
-          <MenuItem value="singleChoice">Single Choice</MenuItem>
-          <MenuItem value="multiChoice">Multiple Choice</MenuItem>
+          <MenuItem id="SC" value="singleChoice">Single Choice</MenuItem>
+          <MenuItem id="MC" value="multiChoice">Multiple Choice</MenuItem>
         </Select>
       </FormControl>
 
@@ -232,13 +232,13 @@ export default function EditQuestionForm (props) {
           <FormGroup>
             <FormControlLabel
               control={
-                <Checkbox checked={selectMediaType.image} onChange={handleImageCheckbox} name="image" />
+                <Checkbox id="img" checked={selectMediaType.image} onChange={handleImageCheckbox} name="image" />
               }
               label="Image"
             />
             <FormControlLabel
               control={
-                <Checkbox checked={selectMediaType.video} onChange={handleVideoCheckbox} name="video" />
+                <Checkbox id="vid" checked={selectMediaType.video} onChange={handleVideoCheckbox} name="video" />
               }
               label="Video Url"
             />
@@ -295,8 +295,8 @@ export default function EditQuestionForm (props) {
         }
       </Box>
       <Box>
-        <Button onClick={props.cancelModified}>Cancel</Button>
-        <Button onClick={createQuestion}>{(props.isAdd) ? 'Create' : 'Edit'}</Button>
+        <Button id="cancelBtn" onClick={props.cancelModified}>Cancel</Button>
+        <Button id="saveBtn" onClick={createQuestion}>{(props.isAdd) ? 'Create' : 'Edit'}</Button>
       </Box>
     </Box>
   )

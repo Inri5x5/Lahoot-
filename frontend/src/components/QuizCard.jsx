@@ -65,7 +65,6 @@ export default function QuizCard (props) {
   }
 
   const updateQuiz = async (status) => {
-    console.log(`/admin/quiz/${props.quiz.id}/${status}`)
     try {
       const headers = {
         'Content-Type': 'application/json',
@@ -112,24 +111,24 @@ export default function QuizCard (props) {
                 alt={props.quiz.name + ' thumbnail'}
               />
               <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
+                <Typography gutterBottom variant="h5" component="div" label="title">
                   {props.quiz.name}
                 </Typography>
                 <Divider textAlign="center">Total Time</Divider>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" color="text.secondary" label="totalTime">
                   {props.quiz.totalTime} seconds
                 </Typography>
                 <Divider textAlign="center">Number of Questions</Divider>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" color="text.secondary" label="questionNum">
                   {props.quiz.totalQuestions}
                 </Typography>
               </CardContent>
             </CardActionArea>
             <CardActions>
-              <Button onClick={() => deleteQuiz(props.quiz.id)}>
+              <Button id="deleteButton" onClick={() => deleteQuiz(props.quiz.id)}>
                 <DeleteIcon />
               </Button>
-              <Button onClick={handleStartQuiz}>
+              <Button id="startButton"onClick={handleStartQuiz}>
                 <StartIcon /> Start Quiz
               </Button>
             </CardActions>
@@ -137,7 +136,7 @@ export default function QuizCard (props) {
         </Item>
       </Grid>
 
-      <Dialog PaperProps={{ sx: { width: '45%' } }}
+      <Dialog id="startSession" PaperProps={{ sx: { width: '45%' } }}
         open={startQuiz}>
         <DialogTitle>Session {sessionId} is now Active!</DialogTitle>
         <DialogContent>
@@ -153,11 +152,11 @@ export default function QuizCard (props) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => updateQuiz('advance')}> Next Question </Button>
-          <Button onClick={openEndQuiz}> <StopIcon/> Stop Quiz </Button>
+          <Button id="endButton" onClick={openEndQuiz}> <StopIcon/> Stop Quiz </Button>
         </DialogActions>
       </Dialog>
 
-      <Dialog PaperProps={{ sx: { width: '45%' } }}
+      <Dialog id="stopSession" PaperProps={{ sx: { width: '45%' } }}
         open={endQuiz}>
         <DialogTitle>Session is now Ended!</DialogTitle>
         <DialogContent>
@@ -166,7 +165,7 @@ export default function QuizCard (props) {
             <Button onClick={resultPage}>
               Yes
             </Button>
-            <Button onClick={dialogClose}>
+            <Button id="closeDialog" onClick={dialogClose}>
               No
             </Button>
           </div>

@@ -1,17 +1,17 @@
 import React from 'react';
 import DashboardNav from '../components/DashboardNav';
 import {
-  Box
+  Box,
+  TableContainer
 } from '@mui/material';
 import { APICall } from '../helper-func.js';
 import { useParams } from 'react-router-dom';
 
 export default function SessionResult () {
-  const [res, setResult] = React.useState({});
+  const [res, setResult] = React.useState([]);
   const { sessionId } = useParams();
 
   const getResult = async () => {
-    console.log(sessionId);
     try {
       const headers = {
         'Content-Type': 'application/json',
@@ -21,8 +21,8 @@ export default function SessionResult () {
       if (data.error) {
         throw new Error(data.error);
       }
-      console.log(data)
-      setResult(res);
+      // console.log(data)
+      setResult(data.results);
     } catch (err) {
       console.log(err);
     }
@@ -30,11 +30,16 @@ export default function SessionResult () {
 
   React.useEffect(() => {
     getResult();
+    console.log(res)
   }, []);
 
   return (
     <Box sx={{ display: 'flex' }}>
       <DashboardNav></DashboardNav>
+      <div>
+        <TableContainer>
+        </TableContainer>
+      </div>
     </Box>
   )
 }
