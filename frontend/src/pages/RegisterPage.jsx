@@ -22,10 +22,10 @@ function Register () {
       };
       const data = await APICall(requestBody, '/admin/auth/register', 'POST', headers);
       localStorage.setItem('token', data.token);
+      setLoading(false);
       navigate('/dashboard');
     } catch (err) {
       alert(err);
-    } finally {
       setLoading(false);
     }
   }
