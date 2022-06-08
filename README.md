@@ -1,4 +1,4 @@
-### Running the Website
+## Running the Website
 
 ### 1.1. The Frontend
 
@@ -7,7 +7,7 @@ Navigate to the `frontend` folder and run `yarn install` to install all of the d
 Please note that some properties that the backend takes in are defined as blank objects. These are objects that can be defined by you, as the backend will simply store your object on some routes and then return it to you on other routes (i.e. the backend doesn't need to understand the schema of some objects you pass it). An example of this object is all of the data associated with a quiz.
 
 
-### 1.2. The Backend
+### 1.2. The Backend (Provided by UNSW)
 
 The backend server exists in an individual repository. After you clone this repo, you must run `yarn install` in `backend` directory once.
 
@@ -20,3 +20,7 @@ The backend is persistent in terms of data storage. That means the data will rem
 Once the backend has started, you can view the API documentation by navigating to `http://localhost:[port]` in a web browser.
 
 The port that the backend runs on (and that the frontend can use) is specified in `frontend/src/config.js`. You can change the port in this file. This file exists so that your frontend knows what port to use when talking to the backend.
+
+## Originality of Work
+
+This project is based on UNSW COMP6080 Assignment 3 Term 1 2022. All copyright and license information are all UNSW rights
